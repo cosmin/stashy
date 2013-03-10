@@ -19,13 +19,13 @@ stash = stashy.connect("http://localhost:7990/stash", "admin", "admin")
 * Retrieve all groups
 
 ```python
-list(stash.admin.groups.all())
+stash.admin.groups.list()
 ```
 
 * Retrieve all users that match a given filter
 
 ```python
-list(stash.admin.users.all(filter="admin"))
+stash.admin.users.list(filter="admin")
 ```
 
 * Add a user to a group
@@ -37,13 +37,13 @@ stash.admin.groups.add_user('stash-users', 'admin')
 * Iterate over all projects (that you have access to)
 
 ```python
-list(stash.projects)
+stash.projects.list()
 ```
 
 * List all the repositories in a given project
 
 ```python
-list(stash.projects[PROJECT].repos.all())
+stash.projects[PROJECT].repos.list()
 ```
 
 * List all the commits in a pull request
