@@ -104,9 +104,15 @@ class Repository(ResourceBase):
 class Repos(ResourceBase, IterableResource):
     @response_or_error
     def create(self, name, scmId="git"):
+        """
+        Create a repository with the given name
+        """
         return self._client.post(self.url(), data=dict(name=name, scmId=scmId))
 
     def __getitem__(self, item):
+        """
+        Return a :class:`Repository` object for operations on a specific repository
+        """
         return Repository(item, self.url(item), self._client, self)
 
 
