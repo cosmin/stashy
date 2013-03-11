@@ -176,7 +176,9 @@ class PullRequests(ResourceBase, IterableResource):
                     state=state)
 
         if reviewers is not None:
-            data['reviewers'] = reviewers
+            data['reviewers'] = []
+            for reviewer in reviewers:
+                data['reviewers'].append({"user": dict(name=reviewer)})
 
         return self._client.post("", data=data)
 
