@@ -93,6 +93,11 @@ list(stash.projects[PROJECT].repos[REPO].pull_requests.commits())
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/approve [POST, DELETE]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/changes [GET]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/commits [GET]
+/projects/{projectKey}/repos/{repositorySlug}/settings/hooks [GET]
+/projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey} [GET]
+/projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey}/enabled [PUT, DELETE]
+/projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey}/settings [PUT, GET]
+/projects/{projectKey}/repos/{repositorySlug}/tags [GET]
 ```
 
 ## Not yet implemented
@@ -121,11 +126,6 @@ list(stash.projects[PROJECT].repos[REPO].pull_requests.commits())
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/diff/{path:.*} [GET]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/participants [GET, DELETE, POST]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/watch [POST, DELETE]
-/projects/{projectKey}/repos/{repositorySlug}/settings/hooks [GET]
-/projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey} [GET]
-/projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey}/enabled [PUT, DELETE]
-/projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey}/settings [PUT, GET]
-/projects/{projectKey}/repos/{repositorySlug}/tags [GET]
 /users [GET, PUT]
 /users/credentials [PUT]
 ```
