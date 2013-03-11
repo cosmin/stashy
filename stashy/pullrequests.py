@@ -180,7 +180,7 @@ class PullRequests(ResourceBase, IterableResource):
             for reviewer in reviewers:
                 data['reviewers'].append({"user": dict(name=reviewer)})
 
-        return self._client.post("", data=data)
+        return self._client.post(self.url(""), data=data)
 
     def __getitem__(self, item):
         """
