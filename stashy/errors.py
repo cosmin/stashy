@@ -6,7 +6,10 @@ class NotFoundException(Exception):
     def __init__(self, response):
         try:
             self.data = response.json()
-            msg = self.data['errors'][0]['message']
+            if 'errors' in self.data:
+                msg = self.data['errors'][0]['message']
+            else:
+                msg = str(self.data)
         except ValueError:
             msg = "Not found: " + response.url
 
