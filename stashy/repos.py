@@ -31,10 +31,16 @@ class Hook(ResourceBase):
 
     @response_or_error
     def settings(self):
+        """
+        Retrieve the settings for a repository hook
+        """
         return self._client.get(self.url("/settings"))
 
     @response_or_error
     def configure(self, configuration):
+        """
+        Modify the settings for a repository hook
+        """
         return self._client.put(self.url("/settings"), data=configuration)
 
 
