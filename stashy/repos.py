@@ -16,11 +16,11 @@ class Hook(ResourceBase):
         return self._client.get(self.url())
 
     @response_or_error
-    def enable(self):
+    def enable(self, configuration=None):
         """
         Enable a repository hook, optionally applying new configuration.
         """
-        return self._client.put(self.url("/enabled"))
+        return self._client.put(self.url("/enabled"), data=configuration)
 
     @response_or_error
     def disable(self):
