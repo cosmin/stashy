@@ -2,6 +2,8 @@
 
 Python API client for the Atlassian Stash REST API
 
+[![Build Status](https://travis-ci.org/RisingOak/stashy.png?branch=master)](https://travis-ci.org/RisingOak/stashy)
+
 ## Installation
 
 ```
