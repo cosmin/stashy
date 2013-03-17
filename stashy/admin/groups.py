@@ -1,6 +1,6 @@
 from ..helpers import ResourceBase, FilteredIterableResource
 from ..errors import ok_or_error, response_or_error
-
+from ..compat import update_doc
 
 class Groups(ResourceBase, FilteredIterableResource):
     @response_or_error
@@ -54,8 +54,8 @@ class Groups(ResourceBase, FilteredIterableResource):
         return self.paginate("/more-non-members", params)
 
 
-Groups.all.im_func.func_doc = """
+update_doc(Groups.all, """
 Returns an iterator that will walk all the groups, paginating as necessary.
 
 filter: if specified only group names containing the supplied string will be returned
-"""
+""")

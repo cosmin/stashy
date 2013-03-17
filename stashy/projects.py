@@ -2,6 +2,7 @@ from .helpers import Nested, ResourceBase, IterableResource
 from .permissions import Permissions
 from .errors import ok_or_error, response_or_error
 from .repos import Repos
+from .compat import update_doc
 
 
 class Project(ResourceBase):
@@ -66,4 +67,4 @@ class Projects(ResourceBase, IterableResource):
         return self._client.post(self.url(), data)
 
 
-Projects.all.im_func.func_doc = """Retrieve projects."""
+update_doc(Projects.all, """Retrieve projects.""")

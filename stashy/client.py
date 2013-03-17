@@ -4,6 +4,7 @@ import requests
 from .helpers import Nested, add_json_headers
 from .admin import Admin
 from .projects import Projects
+from .compat import basestring
 
 
 class Stash(object):

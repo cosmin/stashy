@@ -1,6 +1,6 @@
 from ..helpers import ResourceBase, FilteredIterableResource
 from ..errors import ok_or_error, response_or_error
-
+from ..compat import update_doc
 
 class Users(ResourceBase, FilteredIterableResource):
     @response_or_error
@@ -85,8 +85,8 @@ class Users(ResourceBase, FilteredIterableResource):
         return self.paginate("/more-non-members", params)
 
 
-Users.all.im_func.func_doc = """
+update_doc(Users.all, """
 Returns an iterator that will walk all the users, paginating as necessary.
 
 filter: return only users with usernames, display name or email addresses containing the supplied string
-"""
+""")

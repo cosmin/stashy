@@ -1,6 +1,6 @@
 from .helpers import ResourceBase, Nested, FilteredIterableResource
 from .errors import ok_or_error
-
+from .compat import update_doc
 
 class Groups(ResourceBase, FilteredIterableResource):
     def none(self, filter=None):
@@ -90,14 +90,14 @@ class Permissions(ResourceBase):
     users = Nested(Users)
 
 
-Groups.all.im_func.func_doc = """
+update_doc(Groups.all, """
 Returns groups that have been granted at least one permission.
 
 filter: return only group names containing the supplied string will be returned
-"""
+""")
 
-Users.all.im_func.func_doc = """
+update_doc(Users.all, """
 Returns users that have been granted at least one permission.
 
 filter: if specified only user names containing the supplied string will be returned
-"""
+""")

@@ -1,7 +1,7 @@
 from .helpers import Nested, ResourceBase, IterableResource
 from .errors import ok_or_error, response_or_error
 from .pullrequests import PullRequests
-
+from .compat import update_doc
 
 class Hook(ResourceBase):
     def __init__(self, key, url, client, parent):
@@ -199,4 +199,4 @@ class Repos(ResourceBase, IterableResource):
         return Repository(item, self.url(item), self._client, self)
 
 
-Repos.all.im_func.func_doc = """Retrieve repositories from the project"""
+update_doc(Repos.all, """Retrieve repositories from the project""")

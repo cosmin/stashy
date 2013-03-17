@@ -1,6 +1,6 @@
 # stashy
 
-Python API client for the Atlassian Stash REST API
+Python client for the Atlassian Stash REST API. Supports Python 2.6, 2.7 and 3.3.
 
 [![Build Status](https://travis-ci.org/RisingOak/stashy.png?branch=master)](https://travis-ci.org/RisingOak/stashy)
 
