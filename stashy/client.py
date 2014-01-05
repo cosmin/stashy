@@ -32,11 +32,12 @@ class Stash(object):
 class StashClient(object):
     api_version = '1.0'
 
-    def __init__(self, base_url, username=None, password=None):
+    def __init__(self, base_url, username=None, password=None, verify=True):
         assert isinstance(base_url, basestring)
 
         self._username = username
         self._password = password
+        self._verify=verify
 
         if base_url.endswith("/"):
             self._base_url = base_url[:-1]
@@ -52,22 +53,22 @@ class StashClient(object):
         return self._api_base + resource_path
 
     def head(self, resource, **kw):
-        return requests.head(self.url(resource), auth=(self._username, self._password), **kw)
+        return requests.head(self.url(resource), auth=(self._username, self._password), verify=self._verify, **kw)
 
     def get(self, resource, **kw):
-        return requests.get(self.url(resource), auth=(self._username, self._password), **kw)
+        return requests.get(self.url(resource), auth=(self._username, self._password), verify=self._verify, **kw)
 
     def post(self, resource, data=None, **kw):
         if data:
             kw = add_json_headers(kw)
             data = json.dumps(data)
-        return requests.post(self.url(resource), data, auth=(self._username, self._password), **kw)
+        return requests.post(self.url(resource), data, auth=(self._username, self._password), verify=self._verify, **kw)
 
     def put(self, resource, data=None, **kw):
         if data:
             kw = add_json_headers(kw)
             data = json.dumps(data)
-        return requests.put(self.url(resource), data, auth=(self._username, self._password), **kw)
+        return requests.put(self.url(resource), data, auth=(self._username, self._password), verify=self._verify, **kw)
 
     def delete(self, resource, **kw):
-        return requests.delete(self.url(resource), auth=(self._username, self._password), **kw)
+        return requests.delete(self.url(resource), auth=(self._username, self._password), verify=self._verify, **kw)
