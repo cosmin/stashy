@@ -10,8 +10,8 @@ from .compat import basestring
 class Stash(object):
     _url = "/"
 
-    def __init__(self, base_url, username, password):
-        self._client = StashClient(base_url, username, password)
+    def __init__(self, base_url, username, password, verify=True):
+        self._client = StashClient(base_url, username, password, verify)
 
     admin = Nested(Admin)
     projects = Nested(Projects)
