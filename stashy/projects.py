@@ -1,5 +1,5 @@
 from .helpers import Nested, ResourceBase, IterableResource
-from .permissions import Permissions
+from .permissions import ProjectPermissions
 from .errors import ok_or_error, response_or_error
 from .repos import Repos
 from .compat import update_doc
@@ -40,7 +40,7 @@ class Project(ResourceBase):
     def get(self):
         return self._client.get(self.url())
 
-    permissions = Nested(Permissions)
+    permissions = Nested(ProjectPermissions)
     repos = Nested(Repos)
 
 
