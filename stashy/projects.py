@@ -40,7 +40,7 @@ class Project(ResourceBase):
     def get(self):
         return self._client.get(self.url())
 
-    permissions = Nested(ProjectPermissions)
+    permissions = Nested(ProjectPermissions, relative_path="/permissions")
     repos = Nested(Repos)
 
 
