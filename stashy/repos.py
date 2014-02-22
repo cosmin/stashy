@@ -1,5 +1,6 @@
 from .helpers import Nested, ResourceBase, IterableResource
 from .errors import ok_or_error, response_or_error
+from .permissions import Permissions
 from .pullrequests import PullRequests
 from .compat import update_doc
 
@@ -180,6 +181,7 @@ class Repository(ResourceBase):
             params['path'] = path
         return self.paginate('/commits', params=params)
 
+    permissions = Nested(Permissions)
     pull_requests = Nested(PullRequests, relative_path="/pull-requests")
     settings = Nested(Settings)
 

@@ -90,6 +90,37 @@ class Permissions(ResourceBase):
     users = Nested(Users)
 
 
+class ProjectPermissions(Permissions):
+    def _url_for(self, permission):
+        return self.url().rstrip("/") + "/" + permission + "/all"
+
+    @ok_or_error
+    def grant(self, permission):
+        """
+        Grant or revoke a project permission to all users, i.e. set the default permission.
+
+        project permissions:
+            * PROJECT_READ
+            * PROJECT_WRITE
+            * PROJECT_ADMIN
+
+        """
+        return self._client.post(self._url_for(permission), params=dict(allow=True))
+
+    @ok_or_error
+    def revoke(self, permission):
+        """
+        Revoke a project permission from all users, i.e. revoke the default permission.
+
+        project permissions:
+            * PROJECT_READ
+            * PROJECT_WRITE
+            * PROJECT_ADMIN
+
+        """
+        return self._client.post(self._url_for(permission), params=dict(allow=False))
+
+
 update_doc(Groups.all, """
 Returns groups that have been granted at least one permission.
 
