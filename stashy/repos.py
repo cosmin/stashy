@@ -188,11 +188,14 @@ class Repository(ResourceBase):
 
 class Repos(ResourceBase, IterableResource):
     @response_or_error
-    def create(self, name, scmId="git"):
+    def create(self, name, scmId="git", forkable=True):
         """
         Create a repository with the given name
         """
-        return self._client.post(self.url(), data=dict(name=name, scmId=scmId))
+        return self._client.post(self.url(), data={"name": name,
+                                                   "scmId": scmId,
+                                                   "forkable": forkable,
+                                                   })
 
     def __getitem__(self, item):
         """
