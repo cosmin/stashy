@@ -51,4 +51,7 @@ def ok_or_error(fn, *args, **kw):
 def response_or_error(fn, *args, **kw):
     response = fn(*args, **kw)
     maybe_throw(response)
-    return response.json()
+    try:
+        return response.json()
+    except ValueError:
+        return response.text
