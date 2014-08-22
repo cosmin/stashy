@@ -22,7 +22,7 @@ class GenericException(Exception):
             self.data = response.json()
             msg = "%d: %s" % (response.status_code, self.data)
         except ValueError:
-            msg = "Unknown error: " + response.status_code
+            msg = "Unknown error: %d(%s)" % (response.status_code, response.reason)
 
         super(GenericException, self).__init__(msg)
 
