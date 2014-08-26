@@ -35,16 +35,16 @@ class StashClient(object):
     def __init__(self, base_url, username=None, password=None, verify=True):
         assert isinstance(base_url, basestring)
 
-        self._username = username
-        self._password = password
-        self._verify=verify
-
         if base_url.endswith("/"):
             self._base_url = base_url[:-1]
         else:
             self._base_url = base_url
 
         self._api_base = self._base_url + "/rest/api/" + self.api_version
+
+        self._session = requests.Session()
+        self._session.verify = verify
+        self._session.cookies = self._session.head(self.url(""), auth=(username, password)).cookies
 
     def url(self, resource_path):
         assert isinstance(resource_path, basestring)
@@ -53,22 +53,22 @@ class StashClient(object):
         return self._api_base + resource_path
 
     def head(self, resource, **kw):
-        return requests.head(self.url(resource), auth=(self._username, self._password), verify=self._verify, **kw)
+        return self._session.head(self.url(resource), **kw)
 
     def get(self, resource, **kw):
-        return requests.get(self.url(resource), auth=(self._username, self._password), verify=self._verify, **kw)
+        return self._session.get(self.url(resource), **kw)
 
     def post(self, resource, data=None, **kw):
         if data:
             kw = add_json_headers(kw)
             data = json.dumps(data)
-        return requests.post(self.url(resource), data, auth=(self._username, self._password), verify=self._verify, **kw)
+        return self._session.post(self.url(resource), data, **kw)
 
     def put(self, resource, data=None, **kw):
         if data:
             kw = add_json_headers(kw)
             data = json.dumps(data)
-        return requests.put(self.url(resource), data, auth=(self._username, self._password), verify=self._verify, **kw)
+        return self._session.put(self.url(resource), data, **kw)
 
     def delete(self, resource, **kw):
-        return requests.delete(self.url(resource), auth=(self._username, self._password), verify=self._verify, **kw)
+        return self._session.delete(self.url(resource), **kw)
