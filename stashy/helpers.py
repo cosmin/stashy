@@ -39,7 +39,7 @@ class ResourceBase(object):
             if params:
                 kw['params'] = params
             if start is not None:
-                kw['params'] = dict(start=start)
+                kw['params']['start'] = start
 
             response = self._client.get(url, **kw)
             maybe_throw(response)
