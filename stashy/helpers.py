@@ -29,7 +29,7 @@ class ResourceBase(object):
             url = self._url
         return url + resource_url
 
-    def paginate(self, resource_url, params=None):
+    def paginate(self, resource_url, params=None, values_key='values'):
         url = self.url(resource_url)
 
         more = True
@@ -46,9 +46,9 @@ class ResourceBase(object):
 
             data = response.json()
 
-            if not 'values' in data:
+            if not values_key in data:
                 return
-            for item in data['values']:
+            for item in data[values_key]:
                 yield item
 
             if data['isLastPage']:
