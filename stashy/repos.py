@@ -114,7 +114,7 @@ class Repository(ResourceBase):
             params['orderBy'] = orderBy
         if details is not None:
             params['details'] = details
-        return self._client.get(self.url('/branches'), params=params)
+        return self.paginate('/branches', params=params)
 
     @response_or_error
     def tags(self, filterText=None, orderBy=None):
