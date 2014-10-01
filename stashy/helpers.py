@@ -39,6 +39,7 @@ class ResourceBase(object):
             if params:
                 kw['params'] = params
             if start is not None:
+                kw.setdefault('params', {})
                 kw['params']['start'] = start
 
             response = self._client.get(url, **kw)
