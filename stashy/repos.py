@@ -103,7 +103,7 @@ class Repository(ResourceBase):
         return self._client.get(self.url())
 
     @response_or_error
-    def branches(self, filterText=None, orderBy=None):
+    def branches(self, filterText=None, orderBy=None, details=None):
         """
         Retrieve the branches matching the supplied filterText param.
         """
@@ -112,6 +112,8 @@ class Repository(ResourceBase):
             params['filterText'] = filterText
         if orderBy is not None:
             params['orderBy'] = orderBy
+        if details is not None:
+            params['details'] = details
         return self._client.get(self.url('/branches'), params=params)
 
     @response_or_error
