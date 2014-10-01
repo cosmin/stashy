@@ -138,18 +138,33 @@ class Repository(ResourceBase):
 
     default_branch = property(_get_default_branch, _set_default_branch, doc="Get or set the default branch")
 
-    def browse(self, at=None, type=False, blame='', noContent=''):
+    def files(self, path='', at=None):
+        """
+        Retrieve a page of files from particular directory of a repository. The search is done
+        recursively, so all files from any sub-directory of the specified directory will be returned.
+        """
+        params = {}
+        if at is None:
+            params['at'] = at
+        return self.paginate('/files/' + path, params)
+
+    def browse(self, path='', at=None, type=False, blame='', noContent=''):
+        """
+        Retrieve a page of content for a file path at a specified revision.
+        """
         params = {}
         if at is not None:
             params['at'] = at
-        if type is not None:
+        if type:
             params['type'] = type
-        if blame:
-            params['blame'] = blame
-        if noContent:
-            params['noContent'] = noContent
+            return response_or_error(lambda: self._client.get(self.url('/browse/' + path), params=params))()
+        else:
+            if blame:
+                params['blame'] = blame
+            if noContent:
+                params['noContent'] = noContent
 
-        return self.paginate("/browse", params=params)
+            return self.paginate("/browse/" + path, params=params, values_key='lines')
 
     def changes(self, until, since=None):
         """
