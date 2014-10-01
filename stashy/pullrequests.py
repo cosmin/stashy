@@ -186,6 +186,6 @@ class PullRequests(ResourceBase, IterableResource):
         """
         Return a specific pull requests
         """
-        return PullRequest(item, self.url(item), self._client, self)
+        return PullRequest(item, self.url(str(item)), self._client, self)
 
 
