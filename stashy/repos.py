@@ -103,20 +103,6 @@ class Repository(ResourceBase):
         return self._client.get(self.url())
 
     @response_or_error
-    def branches(self, filterText=None, orderBy=None, details=None):
-        """
-        Retrieve the branches matching the supplied filterText param.
-        """
-        params = {}
-        if filterText is not None:
-            params['filterText'] = filterText
-        if orderBy is not None:
-            params['orderBy'] = orderBy
-        if details is not None:
-            params['details'] = details
-        return self.paginate('/branches', params=params)
-
-    @response_or_error
     def tags(self, filterText=None, orderBy=None):
         """
         Retrieve the tags matching the supplied filterText param.
@@ -135,6 +121,19 @@ class Repository(ResourceBase):
     @ok_or_error
     def _set_default_branch(self, value):
         return self._client.put(self.url('/branches/default'), data=dict(id=value))
+
+    def branches(self, filterText=None, orderBy=None, details=None):
+        """
+        Retrieve the branches matching the supplied filterText param.
+        """
+        params = {}
+        if filterText is not None:
+            params['filterText'] = filterText
+        if orderBy is not None:
+            params['orderBy'] = orderBy
+        if details is not None:
+            params['details'] = details
+        return self.paginate('/branches', params=params)
 
     default_branch = property(_get_default_branch, _set_default_branch, doc="Get or set the default branch")
 
