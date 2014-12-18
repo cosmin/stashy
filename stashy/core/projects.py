@@ -1,8 +1,8 @@
-from .helpers import Nested, ResourceBase, IterableResource
+from ..helpers import Nested, ResourceBase, IterableResource
 from .permissions import ProjectPermissions
-from .errors import ok_or_error, response_or_error
+from ..errors import ok_or_error, response_or_error
 from .repos import Repos
-from .compat import update_doc
+from ..compat import update_doc
 
 
 class Project(ResourceBase):

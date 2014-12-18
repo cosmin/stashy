@@ -6,3 +6,7 @@
 /build
 /pip-log.txt
 /docs/_build
+
+# sublime text items
+*.sublime-project
+*.sublime-workspace

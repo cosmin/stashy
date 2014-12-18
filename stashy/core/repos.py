@@ -1,8 +1,8 @@
-from .helpers import Nested, ResourceBase, IterableResource
-from .errors import ok_or_error, response_or_error
+from ..helpers import Nested, ResourceBase, IterableResource
+from ..errors import ok_or_error, response_or_error
 from .permissions import Permissions
 from .pullrequests import PullRequests
-from .compat import update_doc
+from ..compat import update_doc
 
 class Hook(ResourceBase):
     def __init__(self, key, url, client, parent):

@@ -1,6 +1,6 @@
-from ..helpers import ResourceBase, FilteredIterableResource
-from ..errors import ok_or_error, response_or_error
-from ..compat import update_doc
+from ...helpers import ResourceBase, FilteredIterableResource
+from ...errors import ok_or_error, response_or_error
+from ...compat import update_doc
 
 class Groups(ResourceBase, FilteredIterableResource):
     @response_or_error
