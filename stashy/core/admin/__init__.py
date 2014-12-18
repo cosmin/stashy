@@ -1,4 +1,4 @@
-from ..helpers import Nested, ResourceBase
+from ...helpers import Nested, ResourceBase
 
 from .groups import Groups
 from .users import Users
