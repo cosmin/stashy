@@ -1,6 +1,6 @@
 __version__ = "0.1"
 
-from .helpers import Nested
+from ..helpers import Nested
 from .projects import Projects
 from .admin import Admin
 from .client import CoreClient
