@@ -1,6 +1,6 @@
 from ..helpers import Nested
 from ..errors import response_or_error
-from .branch_permissions import Permitted
+from .branch_permissions import Permitted, Restricted
 from ..compat import update_doc
 from ..repos import Repository, Repos
 
@@ -10,6 +10,7 @@ class RepositoryBranchPermissions(Repository):
         super(RepositoryBranchPermissions, self).__init__(slug, url, client, parent)
 
     permitted = Nested(Permitted)
+    restricted = Nested(Restricted)
 
 
 class ReposBranchPermissions(Repos):
