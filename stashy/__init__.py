@@ -1,4 +1,5 @@
 from .core import Core
+from .branch_permissions import BranchPermissions
 from .client import StashClient
 
 class Stash(object):
@@ -9,6 +10,7 @@ class Stash(object):
 
         # init sub-clients
         self.core = Core(base_url, self._client._session)
+        self.branch_permissions = BranchPermissions(base_url, self._client._session)
 
 
 def connect(url, username, password, verify=True):

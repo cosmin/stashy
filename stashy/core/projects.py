@@ -1,15 +1,14 @@
 from ..helpers import Nested
 from .permissions import ProjectPermissions
 from ..errors import ok_or_error, response_or_error
-from .repos import ReposExtended
+from .repos import ReposCore
 from ..compat import update_doc
 from ..projects import Project, Projects
 
 
-class ProjectExtended(Project):
+class ProjectCore(Project):
     def __init__(self, key, url, client, parent):
-        super(ProjectExtended, self).__init__(url, client, parent)
-        self._key = key
+        super(ProjectCore, self).__init__(key, url, client, parent)
 
     @ok_or_error
     def delete(self):
@@ -38,20 +37,13 @@ class ProjectExtended(Project):
         return self._client.post(self.url(), data)
 
     permissions = Nested(ProjectPermissions, relative_path="/permissions")
-    repos = Nested(ReposExtended)
+    repos = Nested(ReposCore, relative_path='/repos')
 
 
-class ProjectsExtended(Projects):
-    @response_or_error
-    def get(self, project):
-        """
-        Retrieve the project matching the supplied key.
-        """
-        return self._client.get(self.url(project))
+class ProjectsCore(Projects):
 
     def __getitem__(self, item):
-        return Project(item, self.url(item), self._client, self)
-
+        return ProjectCore(item, self.url(item), self._client, self)
 
     @response_or_error
     def create(self, key, name, description='', avatar=None):
@@ -64,4 +56,4 @@ class ProjectsExtended(Projects):
         return self._client.post(self.url(), data)
 
 
-update_doc(ProjectsExtended.all, """Retrieve projects.""")
+update_doc(ProjectsCore.all, """Retrieve projects.""")

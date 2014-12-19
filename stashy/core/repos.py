@@ -75,10 +75,9 @@ class Settings(ResourceBase):
     hooks = Nested(Hooks)
 
 
-class RepositoryExtended(Repository):
+class RepositoryCore(Repository):
     def __init__(self, slug, url, client, parent):
-        super(RepositoryExtended, self).__init__(url, client, parent)
-        self._slug = slug
+        super(RepositoryCore, self).__init__(slug, url, client, parent)
 
     @response_or_error
     def delete(self):
@@ -197,7 +196,7 @@ class RepositoryExtended(Repository):
     settings = Nested(Settings)
 
 
-class ReposExtended(Repos):
+class ReposCore(Repos):
     @response_or_error
     def create(self, name, scmId="git", forkable=True):
         """
@@ -212,7 +211,7 @@ class ReposExtended(Repos):
         """
         Return a :class:`Repository` object for operations on a specific repository
         """
-        return RepositoryExtended(item, self.url(item), self._client, self)
+        return RepositoryCore(item, self.url(item), self._client, self)
 
 
-update_doc(ReposExtended.all, """Retrieve repositories from the project""")
+update_doc(ReposCore.all, """Retrieve repositories from the project""")
