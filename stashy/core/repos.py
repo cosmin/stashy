@@ -3,6 +3,7 @@ from ..errors import ok_or_error, response_or_error
 from .permissions import Permissions
 from .pullrequests import PullRequests
 from ..compat import update_doc
+from ..repos import Repository, Repos
 
 class Hook(ResourceBase):
     def __init__(self, key, url, client, parent):
@@ -74,9 +75,9 @@ class Settings(ResourceBase):
     hooks = Nested(Hooks)
 
 
-class Repository(ResourceBase):
+class RepositoryExtended(Repository):
     def __init__(self, slug, url, client, parent):
-        super(Repository, self).__init__(url, client, parent)
+        super(RepositoryExtended, self).__init__(url, client, parent)
         self._slug = slug
 
     @response_or_error
@@ -94,13 +95,6 @@ class Repository(ResourceBase):
         The repository's slug is derived from its name. If the name changes the slug may also change.
         """
         return self._client.post(self.url(), data=dict(name=name))
-
-    @response_or_error
-    def get(self):
-        """
-        Retrieve the repository
-        """
-        return self._client.get(self.url())
 
     @response_or_error
     def branches(self, filterText=None, orderBy=None, details=None):
@@ -203,7 +197,7 @@ class Repository(ResourceBase):
     settings = Nested(Settings)
 
 
-class Repos(ResourceBase, IterableResource):
+class ReposExtended(Repos):
     @response_or_error
     def create(self, name, scmId="git", forkable=True):
         """
@@ -218,7 +212,7 @@ class Repos(ResourceBase, IterableResource):
         """
         Return a :class:`Repository` object for operations on a specific repository
         """
-        return Repository(item, self.url(item), self._client, self)
+        return RepositoryExtended(item, self.url(item), self._client, self)
 
 
-update_doc(Repos.all, """Retrieve repositories from the project""")
+update_doc(ReposExtended.all, """Retrieve repositories from the project""")

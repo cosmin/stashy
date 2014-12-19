@@ -1,13 +1,14 @@
-from ..helpers import Nested, ResourceBase, IterableResource
+from ..helpers import Nested
 from .permissions import ProjectPermissions
 from ..errors import ok_or_error, response_or_error
-from .repos import Repos
+from .repos import ReposExtended
 from ..compat import update_doc
+from ..projects import Project, Projects
 
 
-class Project(ResourceBase):
+class ProjectExtended(Project):
     def __init__(self, key, url, client, parent):
-        super(Project, self).__init__(url, client, parent)
+        super(ProjectExtended, self).__init__(url, client, parent)
         self._key = key
 
     @ok_or_error
@@ -36,15 +37,11 @@ class Project(ResourceBase):
 
         return self._client.post(self.url(), data)
 
-    @response_or_error
-    def get(self):
-        return self._client.get(self.url())
-
     permissions = Nested(ProjectPermissions, relative_path="/permissions")
-    repos = Nested(Repos)
+    repos = Nested(ReposExtended)
 
 
-class Projects(ResourceBase, IterableResource):
+class ProjectsExtended(Projects):
     @response_or_error
     def get(self, project):
         """
@@ -67,4 +64,4 @@ class Projects(ResourceBase, IterableResource):
         return self._client.post(self.url(), data)
 
 
-update_doc(Projects.all, """Retrieve projects.""")
+update_doc(ProjectsExtended.all, """Retrieve projects.""")
