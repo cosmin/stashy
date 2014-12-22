@@ -5,6 +5,7 @@ from .client import BranchPermissionsClient
 from .projects import ProjectsBranchPermissions
 
 class BranchPermissions(object):
+    """Main object for the "branch-permissions" api"""
     _url = '/'
     def __init__(self, base_url, session):
         self._client = BranchPermissionsClient(base_url, session=session)

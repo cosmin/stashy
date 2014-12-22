@@ -6,6 +6,7 @@ from .admin import Admin
 from .client import CoreClient
 
 class Core(object):
+    """Main object for the "core" api"""
     _url = '/'
     def __init__(self, base_url, session):
         self._client = CoreClient(base_url, session=session)

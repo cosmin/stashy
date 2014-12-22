@@ -4,6 +4,7 @@ from ..compat import update_doc
 
 
 class Permitted(ResourceBase, IterableResource):
+    """Get-only resource that describes a permission record"""
     pass
 
 update_doc(Permitted.all, """Retrieve list of permitted entities for a repo""")
@@ -17,14 +18,14 @@ class Restriction(ResourceBase):
     @response_or_error
     def get(self):
         """
-        Retrieve a pull request.
+        Retrieve a restriction
         """
         return self._client.get(self.url())
 
     @ok_or_error
     def delete(self):
         """
-        Delete a user.
+        Delete a restriction
         """
         return self._client.delete(self.url())
 

@@ -1,8 +1,12 @@
+__version__ = "0.2"
+
 from .core import Core
 from .branch_permissions import BranchPermissions
 from .client import StashClient
 
 class Stash(object):
+    """Parent object for all apis"""
+
     _url = "/"
 
     def __init__(self, base_url, username=None, password=None, verify=True, session=None):

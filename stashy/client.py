@@ -1,10 +1,8 @@
 import json
 import requests
 
-from .core.helpers import Nested, add_json_headers
-from .core.admin import Admin
-from .core.projects import Projects
-from .core.compat import basestring
+from .helpers import add_json_headers
+from .compat import basestring
 
 
 class StashClient(object):
