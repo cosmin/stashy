@@ -1,7 +1,10 @@
 stashy
 ======
 
-Python API client for the Atlassian Stash REST API
+Python client for the Atlassian Stash REST API. Supports Python 2.6, 2.7
+and 3.3.
+
+|Build Status|
 
 Installation
 ------------
@@ -13,7 +16,7 @@ Installation
 Usage
 -----
 
-::
+.. code:: python
 
     import stashy
     stash = stashy.connect("http://localhost:7990/stash", "admin", "admin")
@@ -23,42 +26,65 @@ Examples
 
 -  Retrieve all groups
 
-::
+.. code:: python
 
-    stash.admin.groups.list()
+    stash.core.admin.groups.list()
 
 -  Retrieve all users that match a given filter
 
-::
+.. code:: python
 
-    stash.admin.users.list(filter="admin")
+    stash.core.admin.users.list(filter="admin")
 
 -  Add a user to a group
 
-::
+.. code:: python
 
-    stash.admin.groups.add_user('stash-users', 'admin')
+    stash.core.admin.groups.add_user('stash-users', 'admin')
 
 -  Iterate over all projects (that you have access to)
 
-::
+.. code:: python
 
-    stash.projects.list()
+    stash.core.projects.list()
 
 -  List all the repositories in a given project
 
-::
+.. code:: python
 
-    stash.projects[PROJECT].repos.list()
+    stash.core.projects[PROJECT].repos.list()
 
 -  List all the commits in a pull request
 
-::
+.. code:: python
 
-    list(stash.projects[PROJECT].repos[REPO].pull_requests.commits())
+    list(stash.core.projects[PROJECT].repos[REPO].pull_requests.commits())
+
+-  List all branch restrictions for a repo
+
+.. code:: python
+
+    stash.branch_permissions.projects[PROJECT].repos[REPO].restricted.list()
+
+-  List all branch permission entities for a repo
+
+.. code:: python
+
+    stash.branch_permissions.projects[PROJECT].repos[REPO].permitted.list()
 
 Implemented
 -----------
+
+Stash provides several separate APIs. Currently, the `branch-permissions
+API <https://developer.atlassian.com/static/rest/stash/3.5.1/stash-branch-permissions-rest.html>`__
+is fully supported, the `core
+API <https://developer.atlassian.com/static/rest/stash/3.5.1/stash-rest.html>`__
+is partially supported, and `all
+others <https://developer.atlassian.com/stash/docs/latest/reference/rest-api.html>`__
+are unsupported. Further details below.
+
+Core supported endpoints
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -106,8 +132,8 @@ Implemented
     /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey}/settings [PUT, GET]
     /projects/{projectKey}/repos/{repositorySlug}/tags [GET]
 
-Not yet implemented
--------------------
+Core unsupported endpoints
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -137,3 +163,5 @@ Not yet implemented
     /users [GET, PUT]
     /users/credentials [PUT]
 
+.. |Build Status| image:: https://travis-ci.org/RisingOak/stashy.png?branch=master
+   :target: https://travis-ci.org/RisingOak/stashy
