@@ -1,6 +1,19 @@
-__version__ = "0.1"
+__version__ = "0.2"
 
-from .client import Stash
+from .core import Core
+from .branch_permissions import BranchPermissions
+from .client import StashClient
+
+class Stash(object):
+    """Parent object for all apis"""
+    _url = "/"
+    def __init__(self, base_url, username=None, password=None, verify=True, session=None):
+        self._client = StashClient(base_url, username, password, verify, session=session)
+
+        # init sub-clients
+        self.core = Core(base_url, self._client._session)
+        self.branch_permissions = BranchPermissions(base_url, self._client._session)
+
 
 def connect(url, username, password, verify=True):
     """Connect to a Stash instance given a username and password.
@@ -10,5 +23,3 @@ def connect(url, username, password, verify=True):
     verifcation.
     """
     return Stash(url, username, password, verify)
-
-__all__ = ['connect']

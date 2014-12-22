@@ -112,5 +112,8 @@ class Nested(object):
             parent_url = parent_url[:-1]
 
         url = parent_url + self.relative_path
-        return self.cls(url=url, client=instance._client, parent=instance)
+        return self.cls(
+                        url=url,
+                        client=instance._client,
+                        parent=instance)
 

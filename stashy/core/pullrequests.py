@@ -1,5 +1,5 @@
-from .helpers import Nested, ResourceBase, IterableResource
-from .errors import ok_or_error, response_or_error
+from ..helpers import Nested, ResourceBase, IterableResource
+from ..errors import ok_or_error, response_or_error
 
 
 class PullRequestRef(object):

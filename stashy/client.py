@@ -1,32 +1,8 @@
 import json
 import requests
 
-from .helpers import Nested, add_json_headers
-from .admin import Admin
-from .projects import Projects
+from .helpers import add_json_headers
 from .compat import basestring
-
-
-class Stash(object):
-    _url = "/"
-
-    def __init__(self, base_url, username=None, password=None, verify=True, session=None):
-        self._client = StashClient(base_url, username, password, verify, session=session)
-
-    admin = Nested(Admin)
-    projects = Nested(Projects)
-
-    def groups(self, filter=None):
-        """
-        Consider using stash.admin.groups instead.
-        """
-        return self.admin.groups.get(filter)
-
-    def users(self, filter=None):
-        """
-        Consider using stash.admin.users instead.
-        """
-        return self.admin.users.get(filter)
 
 
 class StashClient(object):
@@ -40,7 +16,8 @@ class StashClient(object):
         else:
             self._base_url = base_url
 
-        self._api_base = self._base_url + "/rest/api/" + self.api_version
+        # this won't be functional without being subclassed
+        self._api_base = self._base_url
 
         if session is None:
             session = requests.Session()
