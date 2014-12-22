@@ -6,9 +6,7 @@ from .client import StashClient
 
 class Stash(object):
     """Parent object for all apis"""
-
     _url = "/"
-
     def __init__(self, base_url, username=None, password=None, verify=True, session=None):
         self._client = StashClient(base_url, username, password, verify, session=session)
 
