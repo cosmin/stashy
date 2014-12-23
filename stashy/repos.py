@@ -3,7 +3,7 @@ from .errors import ok_or_error, response_or_error
 from .permissions import Permissions
 from .pullrequests import PullRequests
 from .compat import update_doc
-from .branch_permissions import Permitted, Restricted
+from .branch_permissions import BranchPermissions
 
 class Hook(ResourceBase):
     def __init__(self, key, url, client, parent):
@@ -201,10 +201,7 @@ class Repository(ResourceBase):
     permissions = Nested(Permissions)
     pull_requests = Nested(PullRequests, relative_path="/pull-requests")
     settings = Nested(Settings)
-
-    # branch-permissions items
-    permitted = Nested(Permitted)
-    restricted = Nested(Restricted)
+    branch_permissions = Nested(BranchPermissions, relative_path=None)
 
 
 class Repos(ResourceBase, IterableResource):

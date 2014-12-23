@@ -1,4 +1,4 @@
-from .helpers import ResourceBase, IterableResource
+from .helpers import ResourceBase, IterableResource, Nested
 from .errors import ok_or_error, response_or_error
 from .compat import update_doc
 
@@ -71,3 +71,8 @@ class Restricted(ResourceBase, IterableResource):
         return self._client.post(self.url(""), data=data)
 
 update_doc(Restricted.all, """Retrieve list of restrictions for a repo""")
+
+class BranchPermissions(ResourceBase):
+    """Simple parent resource for this api, to distinguish permissions from permitted"""
+    permitted = Nested(Permitted)
+    restricted = Nested(Restricted)

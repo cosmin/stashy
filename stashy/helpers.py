@@ -108,13 +108,21 @@ class FilteredIterableResource(IterableResource):
 
 
 class Nested(object):
-    def __init__(self, cls, relative_path=None):
-        if relative_path:
+    def __init__(self, cls, relative_path=''):
+
+        # nested object for clarity of usage, no effect on resource url
+        if relative_path is None:
+            self.relative_path = ''
+
+        # default case, use lowercase class name
+        elif not relative_path:
+            self.relative_path = "/%s" % cls.__name__.lower()
+
+        # explicit override of relative path
+        else:
             if not relative_path.startswith("/"):
                 relative_path = "/" + relative_path
             self.relative_path = relative_path
-        else:
-            self.relative_path = "/%s" % cls.__name__.lower()
         self.cls = cls
 
     def __get__(self, instance, kind):
