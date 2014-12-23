@@ -54,6 +54,16 @@ stash.projects[PROJECT].repos.list()
 list(stash.projects[PROJECT].repos[REPO].pull_requests.commits())
 ```
 
+* List all branch restrictions for a repo
+```python
+stash.projects[PROJECT].repos[REPO].restricted.list()
+```
+
+* List all branch permission entities for a repo
+```python
+stash.projects[PROJECT].repos[REPO].permitted.list()
+```
+
 ## Implemented
 
 ```
