@@ -18,7 +18,7 @@ class Project(ResourceBase):
         return self._client.delete(self.url())
 
     @response_or_error
-    def update(self, project, new_key=None, name=None, description=None, avatar=None):
+    def update(self, new_key=None, name=None, description=None, avatar=None, public=None):
         """
         Update project information. If supplied, avatar should be a base64 encoded image.
 
@@ -33,6 +33,8 @@ class Project(ResourceBase):
             data['description'] = description
         if avatar is not None:
             data['avatar'] = "data:image/png;base64," + avatar
+        if public is not None:
+            data['public'] = public
 
         return self._client.post(self.url(), data)
 
