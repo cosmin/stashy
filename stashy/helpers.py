@@ -14,11 +14,22 @@ def add_json_headers(kw):
 
 
 class ResourceBase(object):
-    def __init__(self, url, client, parent):
-        self._url = url
+    def __init__(self, url, client, parent, api_path=None):
         self._client = client
         self._parent = parent
+        if api_path is None:
+            api_path = self._client.core_api_path
 
+        # make sure we're only prefixing with one api path
+        if url.startswith(api_path):
+            self._url = url
+        elif url.startswith(self._client.core_api_path):
+            self._url = url.replace(self._client.core_api_path, api_path)
+        else:
+            if url.startswith('/'):
+                url = url[1:]
+            self._url = '{0}/{1}'.format(api_path, url)
+ 
     def url(self, resource_url=""):
         if resource_url and not resource_url.startswith("/"):
             resource_url = "/" + resource_url
@@ -97,13 +108,21 @@ class FilteredIterableResource(IterableResource):
 
 
 class Nested(object):
-    def __init__(self, cls, relative_path=None):
-        if relative_path:
+    def __init__(self, cls, relative_path=''):
+
+        # nested object for clarity of usage, no effect on resource url
+        if relative_path is None:
+            self.relative_path = ''
+
+        # default case, use lowercase class name
+        elif not relative_path:
+            self.relative_path = "/%s" % cls.__name__.lower()
+
+        # explicit override of relative path
+        else:
             if not relative_path.startswith("/"):
                 relative_path = "/" + relative_path
             self.relative_path = relative_path
-        else:
-            self.relative_path = "/%s" % cls.__name__.lower()
         self.cls = cls
 
     def __get__(self, instance, kind):

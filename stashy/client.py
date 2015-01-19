@@ -30,7 +30,11 @@ class Stash(object):
 
 
 class StashClient(object):
-    api_version = '1.0'
+
+    # the core api path will be used as an overridable default
+    core_api_name = 'api'
+    core_api_version = '1.0'
+    core_api_path = '{0}/{1}'.format(core_api_name, core_api_version)
 
     def __init__(self, base_url, username=None, password=None, verify=True, session=None):
         assert isinstance(base_url, basestring)
@@ -40,7 +44,7 @@ class StashClient(object):
         else:
             self._base_url = base_url
 
-        self._api_base = self._base_url + "/rest/api/" + self.api_version
+        self._api_base = self._base_url + "/rest"
 
         if session is None:
             session = requests.Session()
