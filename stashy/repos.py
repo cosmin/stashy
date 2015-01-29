@@ -104,6 +104,31 @@ class Repository(ResourceBase):
         return self._client.get(self.url())
 
     @response_or_error
+    def fork(self, name = None, project = None):
+        """
+        Fork the repository.
+
+        name    - Specifies the forked repository's name
+                    Defaults to the name of the origin repository if not specified
+        project - Specifies the forked repository's target project by key
+                    Defaults to the current user's personal project if not specified
+        
+        """
+        data = dict()
+        if name is not None:
+            data['name'] = name
+        if project is not None:
+            data['project'] = {"key": project}
+            
+        return self._client.post(self.url(), data=data)
+
+    def forks(self):
+        """
+        Retrieve repositories which have been forked from this one.
+        """
+        return self.paginate('/forks')
+
+    @response_or_error
     def tags(self, filterText=None, orderBy=None):
         """
         Retrieve the tags matching the supplied filterText param.
