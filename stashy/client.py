@@ -4,6 +4,7 @@ import requests
 from .helpers import Nested, add_json_headers
 from .admin import Admin
 from .projects import Projects
+from .ssh import Keys
 from .compat import basestring
 
 
@@ -15,6 +16,7 @@ class Stash(object):
 
     admin = Nested(Admin)
     projects = Nested(Projects)
+    ssh = Nested(Keys)
 
     def groups(self, filter=None):
         """
