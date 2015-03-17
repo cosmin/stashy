@@ -92,7 +92,7 @@ stash.projects[PROJECT].repos[REPO].permitted.list()
 /projects/{projectKey}/permissions/{permission}/all [GET, POST]
 /projects/{projectKey}/repos [POST, GET]
 /projects/{projectKey}/repos/{repositorySlug} [DELETE, POST, PUT, GET]
-/projects/{projectKey}/repos/{repositorySlug}/branches [GET]
+/projects/{projectKey}/repos/{repositorySlug}/branches [GET, PUT, DELETE]
 /projects/{projectKey}/repos/{repositorySlug}/branches/default [GET, PUT]
 /projects/{projectKey}/repos/{repositorySlug}/changes [GET]
 /projects/{projectKey}/repos/{repositorySlug}/commits [GET]
