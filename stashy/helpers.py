@@ -52,8 +52,9 @@ class ResourceBase(object):
                 url = self._url
         return url + resource_url
 
-    def paginate(self, resource_url, params=None, values_key='values'):
-        url = self.url(resource_url)
+    def paginate(self, resource_url, params=None, values_key='values',
+                 is_branches=False):
+        url = self.url(resource_url, is_branches)
 
         more = True
         start = None
