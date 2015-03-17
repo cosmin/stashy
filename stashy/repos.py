@@ -148,6 +148,18 @@ class Repository(ResourceBase):
     def _set_default_branch(self, value):
         return self._client.put(self.url('/branches/default'), data=dict(id=value))
 
+    @ok_or_error
+    def create_branch(self, value):
+        return self._client.put(self.url('/branches', is_branches=True),
+                                data=dict(name=value, startPoint=
+                                "refs/heads/master"))
+
+    @ok_or_error
+    def create_branch(self, value):
+        return self._client.delete(self.url('/branches', is_branches=True),
+                                data=dict(name='/refs/heads/'+value,
+                                          dryRun='false'))
+
     def branches(self, filterText=None, orderBy=None, details=None):
         """
         Retrieve the branches matching the supplied filterText param.
