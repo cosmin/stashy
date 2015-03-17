@@ -1,6 +1,6 @@
 from .helpers import Nested, ResourceBase, IterableResource
 from .errors import ok_or_error, response_or_error
-from .permissions import Permissions
+from .permissions import Permissions, RepositoryPermissions
 from .pullrequests import PullRequests
 from .compat import update_doc
 from .branch_permissions import BranchPermissions
@@ -236,6 +236,9 @@ class Repository(ResourceBase):
         return self.paginate('/commits', params=params)
 
     permissions = Nested(Permissions)
+    repo_permissions = Nested(RepositoryPermissions,
+                              relative_path="/permissions")
+
     pull_requests = Nested(PullRequests, relative_path="/pull-requests")
     settings = Nested(Settings)
     branch_permissions = Nested(BranchPermissions, relative_path=None)
