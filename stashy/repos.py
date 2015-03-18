@@ -157,7 +157,7 @@ class Repository(ResourceBase):
     @ok_or_error
     def delete_branch(self, value):
         return self._client.delete(self.url('/branches', is_branches=True),
-                                data=dict(name='/refs/heads/'+value,
+                                data=dict(name=value,
                                           dryRun='false'))
 
     def branches(self, filterText=None, orderBy=None, details=None):
