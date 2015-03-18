@@ -37,6 +37,7 @@ class ResourceBase(object):
         elif url.startswith(self._client.branches_api_path):
             self._branchesurl = url.replace(self._client.branches_api_path, branches_api_path)
         else:
+            print(url)
             self._branchesurl = '{0}/'.format(branches_api_path)
 
  
