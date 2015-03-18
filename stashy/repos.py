@@ -155,7 +155,7 @@ class Repository(ResourceBase):
                                 "refs/heads/master"))
 
     @ok_or_error
-    def create_branch(self, value):
+    def delete_branch(self, value):
         return self._client.delete(self.url('/branches', is_branches=True),
                                 data=dict(name='/refs/heads/'+value,
                                           dryRun='false'))
