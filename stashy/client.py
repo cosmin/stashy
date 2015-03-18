@@ -87,6 +87,8 @@ class StashClient(object):
             data = json.dumps(data)
         return self._session.put(self.url(resource), data, **kw)
 
-    def delete(self, resource, data=None, **kw):
-        data = json.dumps(data)
+    def delete(self, resource, data=None,**kw):
+        if data:
+            data = json.dumps(data)
+            kw = add_json_headers(kw)
         return self._session.delete(self.url(resource),data, **kw)
