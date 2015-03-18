@@ -25,12 +25,19 @@ class ResourceBase(object):
         # make sure we're only prefixing with one api path
         if url.startswith(api_path):
             self._url = url
+            self._branchesurl = '{0}/{1}'.format(branches_api_path, url)
+
         elif url.startswith(self._client.core_api_path):
-            self._url = url.replace(self._client.core_api_path, branches_api_path)
+            self._url = url.replace(self._client.core_api_path, api_path)
+            self._branchesurl = '{0}/{1}'.format(branches_api_path, url)
         elif url.startswith(branches_api_path):
             self._branchesurl = url
+            self._url = '{0}/{1}'.format(api_path, url)
+
         elif url.startswith(self._client.branches_api_path):
             self._branchesurl = url.replace(self._client.branches_api_path, branches_api_path)
+            self._url = '{0}/{1}'.format(api_path, url)
+
         else:
             if url.startswith('/'):
                 url = url[1:]
