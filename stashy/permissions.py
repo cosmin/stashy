@@ -74,6 +74,12 @@ class Users(ResourceBase, FilteredIterableResource):
             * PROJECT_READ
             * PROJECT_WRITE
             * PROJECT_ADMIN
+
+        repository permissions:
+            * REPO_READ
+            * REPO_WRITE
+            * REPO_ADMIN
+
         """
         return self._client.put(self.url(), params=dict(name=user, permission=permission))
 
@@ -119,6 +125,40 @@ class ProjectPermissions(Permissions):
 
         """
         return self._client.post(self._url_for(permission), params=dict(allow=False))
+
+class RepositoryPermissions(Permissions):
+    def _url_for(self):
+        return self.url().rstrip("/") + "/users"
+
+    @ok_or_error
+    def grant(self, user, permission):
+        """
+        Grant or revoke a repository permission to all users, i.e. set the
+        default permission.
+
+        repository permissions:
+            * REPO_READ
+            * REPO_WRITE
+            * REPO_ADMIN
+
+
+        """
+        return self._client.post(self._url_for(), params=dict(name=user,
+                                                              permission=permission))
+
+    @ok_or_error
+    def revoke(self, user):
+        """
+        Revoke a repository permission from all users, i.e. revoke the default
+        permission.
+
+        repository permissions:
+            * REPO_READ
+            * REPO_WRITE
+            * REPO_ADMIN
+
+        """
+        return self._client.post(self._url_for(), params=dict(name=user))
 
 
 update_doc(Groups.all, """
