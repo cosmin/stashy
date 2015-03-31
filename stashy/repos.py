@@ -149,7 +149,7 @@ class Repository(ResourceBase):
         return self._client.put(self.url('/branches/default'), data=dict(id=value))
 
     @ok_or_error
-    def create_branch(self, value, origin_branch):
+    def create_branch(self, value, origin_branch='master'):
         return self._client.post(self.url('/branches', is_branches=True),
                                 data=dict(name=value, startPoint=
                                 "refs/heads/%s" % origin_branch))
