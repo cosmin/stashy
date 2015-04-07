@@ -112,14 +112,14 @@ class Repository(ResourceBase):
                     Defaults to the name of the origin repository if not specified
         project - Specifies the forked repository's target project by key
                     Defaults to the current user's personal project if not specified
-        
+
         """
         data = dict()
         if name is not None:
             data['name'] = name
         if project is not None:
             data['project'] = {"key": project}
-            
+
         return self._client.post(self.url(), data=data)
 
     def forks(self):
@@ -149,10 +149,10 @@ class Repository(ResourceBase):
         return self._client.put(self.url('/branches/default'), data=dict(id=value))
 
     @ok_or_error
-    def create_branch(self, value):
+    def create_branch(self, value, origin_branch='master'):
         return self._client.post(self.url('/branches', is_branches=True),
                                 data=dict(name=value, startPoint=
-                                "refs/heads/master"))
+                                "refs/heads/%s" % origin_branch))
 
     @ok_or_error
     def delete_branch(self, value):
