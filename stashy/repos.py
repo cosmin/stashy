@@ -159,6 +159,10 @@ class Repository(ResourceBase):
         return self._client.delete(self.url('/branches', is_branches=True),
                                 data=dict(name=value,
                                           dryRun='false'))
+    @response_or_error
+    def get_branch_info(self, changesetId):
+        return self._client.get(self.url('/branches/info/%s' % changesetId,
+                                            is_branches=True))
 
     def branches(self, filterText=None, orderBy=None, details=None):
         """
