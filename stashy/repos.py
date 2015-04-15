@@ -1,6 +1,6 @@
 from .helpers import Nested, ResourceBase, IterableResource
 from .errors import ok_or_error, response_or_error
-from .permissions import Permissions
+from .permissions import Permissions, RepositoryPermissions
 from .pullrequests import PullRequests
 from .compat import update_doc
 from .branch_permissions import BranchPermissions
@@ -148,6 +148,22 @@ class Repository(ResourceBase):
     def _set_default_branch(self, value):
         return self._client.put(self.url('/branches/default'), data=dict(id=value))
 
+    @ok_or_error
+    def create_branch(self, value, origin_branch='master'):
+        return self._client.post(self.url('/branches', is_branches=True),
+                                data=dict(name=value, startPoint=
+                                "refs/heads/%s" % origin_branch))
+
+    @ok_or_error
+    def delete_branch(self, value):
+        return self._client.delete(self.url('/branches', is_branches=True),
+                                data=dict(name=value,
+                                          dryRun='false'))
+    @response_or_error
+    def get_branch_info(self, changesetId):
+        return self._client.get(self.url('/branches/info/%s' % changesetId,
+                                            is_branches=True))
+
     def branches(self, filterText=None, orderBy=None, details=None):
         """
         Retrieve the branches matching the supplied filterText param.
@@ -224,6 +240,9 @@ class Repository(ResourceBase):
         return self.paginate('/commits', params=params)
 
     permissions = Nested(Permissions)
+    repo_permissions = Nested(RepositoryPermissions,
+                              relative_path="/permissions")
+
     pull_requests = Nested(PullRequests, relative_path="/pull-requests")
     settings = Nested(Settings)
     branch_permissions = Nested(BranchPermissions, relative_path=None)
