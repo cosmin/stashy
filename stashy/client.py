@@ -93,4 +93,4 @@ class StashClient(object):
             kw = add_json_headers(kw)
             return self._session.request(method='DELETE', url=self.url(
                 resource), data=data, **kw)
-        return self._session.delete(self.url(resource),data, **kw)
+        return self._session.delete(self.url(resource), **kw)
