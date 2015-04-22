@@ -21,6 +21,8 @@ class ResourceBase(object):
         if api_path is None:
             api_path = self._client.core_api_path
             branches_api_path = self._client.branches_api_path
+        if branches_api_path is None:
+            branches_api_path = self._client.branches_api_path
 
         # make sure we're only prefixing with one api path
         if url.startswith(api_path):
@@ -35,6 +37,8 @@ class ResourceBase(object):
                 url = url[1:]
             self._url = '{0}/{1}'.format(api_path, url)
             self._branchesurl = '{0}/{1}'.format(branches_api_path, url)
+
+
 
  
     def url(self, resource_url="", is_branches=False):

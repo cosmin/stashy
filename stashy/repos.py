@@ -97,6 +97,18 @@ class Repository(ResourceBase):
         return self._client.post(self.url(), data=dict(name=name))
 
     @response_or_error
+    def move(self, newProject):
+        """
+        Create a repository with the given name
+        """
+        import ipdb;ipdb.set_trace()
+        return self._client.post(self.url(), data={"name": name,
+                                                   "scmId": scmId,
+                                                   "forkable": forkable,
+                                                   })
+
+
+    @response_or_error
     def get(self):
         """
         Retrieve the repository
