@@ -69,15 +69,6 @@ class Restricted(ResourceBase, IterableResource):
             data['groups'] = groups
 
         return self._client.post(self.url(""), data=data)
-    def delete(self, value, users=None, groups=None, pattern=False):
-        """
-        UnRestrict a branch, or set of branches defined by a pattern, to a set of users and/or groups
-        """
-        type='PATTERN' if pattern else 'BRANCH'
-        import ipdb;ipdb.set_trace()
-
-        restrictionId = 1
-        return self._client.delete(self.url("/%s" % restrictionId), data=data)
 
 update_doc(Restricted.all, """Retrieve list of restrictions for a repo""")
 
