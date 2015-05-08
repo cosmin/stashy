@@ -1,5 +1,6 @@
 from .helpers import Nested, ResourceBase, IterableResource
 from .errors import ok_or_error, response_or_error
+from .compat import basestring
 
 
 class PullRequestRef(object):
