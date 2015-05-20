@@ -1,6 +1,7 @@
-from .helpers import Nested, ResourceBase, IterableResource
+from .helpers import ResourceBase, IterableResource
 from .errors import ok_or_error, response_or_error
 from .compat import basestring
+from pullrequestdiffs import PullRequestDiff
 
 
 class PullRequestRef(object):
@@ -27,7 +28,6 @@ class PullRequest(ResourceBase):
         Retrieve a pull request.
         """
         return self._client.get(self.url())
-
 
     @response_or_error
     def update(self, version, title=None, description=None, reviewers=None):
@@ -126,6 +126,12 @@ class PullRequest(ResourceBase):
         Retrieve changesets for the specified pull request.
         """
         return self.paginate('/commits')
+
+    def diff(self):
+        """
+        Retrieve the diff for the specified pull request.
+        """
+        return PullRequestDiff(self.url('/diff'), self._client, self)
 
 
 class PullRequests(ResourceBase, IterableResource):
