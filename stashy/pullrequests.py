@@ -1,7 +1,7 @@
 from .helpers import ResourceBase, IterableResource
 from .errors import ok_or_error, response_or_error
 from .compat import basestring
-from pullrequestdiffs import PullRequestDiff
+from .pullrequestdiffs import PullRequestDiff
 
 
 class PullRequestRef(object):

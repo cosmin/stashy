@@ -1,4 +1,4 @@
-from diffs import Diff
+from .diffs import Diff
 from .helpers import ResourceBase
 from .errors import response_or_error
 

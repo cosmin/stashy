@@ -1,4 +1,4 @@
-from fileinfo import FileInfo
+from .fileinfo import FileInfo
 
 
 class Diff:
