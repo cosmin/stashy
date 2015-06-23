@@ -143,7 +143,7 @@ class RepositoryPermissions(Permissions):
 
 
         """
-        return self._client.post(self._url_for(), params=dict(name=user,
+        return self._client.put(self._url_for(), params=dict(name=user,
                                                               permission=permission))
 
     @ok_or_error
