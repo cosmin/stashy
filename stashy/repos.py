@@ -167,6 +167,11 @@ class Repository(ResourceBase):
                                 "refs/heads/%s" % origin_branch))
 
     @ok_or_error
+    def update_sync(self, value):
+        return self._client.post(self.url('/', is_sync=True),
+                                data=dict(enabled=value))
+
+    @ok_or_error
     def delete_branch(self, value):
         return self._client.delete(self.url('/branches', is_branches=True),
                                 data=dict(name=value,

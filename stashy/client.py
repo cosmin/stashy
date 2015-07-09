@@ -42,6 +42,10 @@ class StashClient(object):
     branches_api_version = '1.0'
     branches_api_path = '{0}/{1}'.format(branches_api_name, branches_api_version)
 
+    branches_api_name = 'sync'
+    branches_api_version = 'latest'
+    branches_api_path = '{0}/{1}'.format(branches_api_name, branches_api_version)
+
     def __init__(self, base_url, username=None, password=None, verify=True, session=None):
         assert isinstance(base_url, basestring)
 
