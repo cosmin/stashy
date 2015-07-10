@@ -121,6 +121,8 @@ Implemented
     /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey}/settings [PUT, GET]
     /projects/{projectKey}/repos/{repositorySlug}/tags [GET]
 
+    /sync/latest/projects/{projectkey}/repos/{repositorySlug} [POST]
+
 Not yet implemented
 -------------------
 
