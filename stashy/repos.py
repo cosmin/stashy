@@ -94,18 +94,17 @@ class Repository(ResourceBase):
 
         The repository's slug is derived from its name. If the name changes the slug may also change.
         """
-        return self._client.post(self.url(), data=dict(name=name))
+        return self._client.put(self.url(), data=dict(name=name))
 
     @response_or_error
     def move(self, newProject):
         """
         Create a repository with the given name
         """
-        import ipdb;ipdb.set_trace()
-        return self._client.post(self.url(), data={"name": name,
-                                                   "scmId": scmId,
-                                                   "forkable": forkable,
-                                                   })
+        return self._client.put(self.url(), data={"project": {
+            "key": newProject
+        }
+        })
 
 
     @response_or_error
