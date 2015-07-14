@@ -112,6 +112,8 @@ stash.projects[PROJECT].repos[REPO].permitted.list()
 /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey}/enabled [PUT, DELETE]
 /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey}/settings [PUT, GET]
 /projects/{projectKey}/repos/{repositorySlug}/tags [GET]
+
+sync/latest/projects/{projectKey}/repos/{repositorySlug} [POST]
 ```
 
 ## Not yet implemented
