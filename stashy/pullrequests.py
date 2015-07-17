@@ -120,7 +120,6 @@ class PullRequest(ResourceBase):
         """
         return self.paginate("/changes")
 
-    @response_or_error
     def commits(self):
         """
         Retrieve changesets for the specified pull request.
