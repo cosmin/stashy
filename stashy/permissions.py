@@ -91,10 +91,79 @@ class Users(ResourceBase, FilteredIterableResource):
         return self._client.delete(self.url(), params=dict(name=user))
 
 
-class Permissions(ResourceBase):
-    groups = Nested(Groups)
-    users = Nested(Users)
+class RepositoryUserPermissions(Permissions):
+    def _url_for(self):
+        return self.url().rstrip("/")
 
+    @ok_or_error
+    def grant(self, user, permission):
+        """
+        Grant or revoke a repository permission to all users, i.e. set the
+        default permission.
+
+        repository permissions:
+            * REPO_READ
+            * REPO_WRITE
+            * REPO_ADMIN
+
+
+        """
+        return self._client.put(self._url_for(), params=dict(name=user,
+                                                              permission=permission))
+
+    @ok_or_error
+    def revoke(self, user):
+        """
+        Revoke a repository permission from all users, i.e. revoke the default
+        permission.
+
+        repository permissions:
+            * REPO_READ
+            * REPO_WRITE
+            * REPO_ADMIN
+
+        """
+        return self._client.delete(self._url_for(), params=dict(name=user))
+
+class RepositoryGroupPermissions(Permissions):
+    def _url_for(self):
+        return self.url().rstrip("/")
+
+    @ok_or_error
+    def grant(self, group, permission):
+        """
+        Grant or revoke a repository permission to all groups, i.e. set the
+        default permission.
+
+        repository permissions:
+            * REPO_READ
+            * REPO_WRITE
+            * REPO_ADMIN
+
+
+        """
+        return self._client.put(self._url_for(), params=dict(name=group,
+                                                              permission=permission))
+
+    @ok_or_error
+    def revoke(self, group):
+        """
+        Revoke a repository permission from all groups, i.e. revoke the default
+        permission.
+
+        repository permissions:
+            * REPO_READ
+            * REPO_WRITE
+            * REPO_ADMIN
+
+        """
+        return self._client.delete(self._url_for(), params=dict(name=group))
+
+class RepositoryPermissions(Permissions):
+    groups = Nested(RepositoryGroupPermissions,
+                    relative_path="/groups")
+    users = Nested(RepositoryUserPermissions,
+                   relative_path="/users")
 
 class ProjectPermissions(Permissions):
     def _url_for(self, permission):
