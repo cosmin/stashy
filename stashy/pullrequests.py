@@ -45,7 +45,6 @@ class PullRequest(ResourceBase):
             data['reviewers'] = reviewers
         return self._client.put(self.url(), data=data)
 
-    @response_or_error
     def activities(self, fromId=None, fromType=None):
         """
         Retrieve a page of activity associated with a pull request.
@@ -64,7 +63,7 @@ class PullRequest(ResourceBase):
                 raise ValueError("fromType is required when fromId is supplied")
             params['fromId'] = fromId
             params['fromType'] = fromType
-        return self._client.get(self.url("/activities"), params=params)
+        return self.paginate("/activities", params=params)
 
     @ok_or_error
     def decline(self, version=-1):
