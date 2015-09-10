@@ -128,7 +128,6 @@ class Repository(ResourceBase):
         """
         return self.paginate('/forks')
 
-    @response_or_error
     def tags(self, filterText=None, orderBy=None):
         """
         Retrieve the tags matching the supplied filterText param.
@@ -138,7 +137,7 @@ class Repository(ResourceBase):
             params['filterText'] = filterText
         if orderBy is not None:
             params['orderBy'] = orderBy
-        return self._client.get(self.url('/tags'), params=params)
+        return self.paginate('/tags', params=params)
 
     @response_or_error
     def _get_default_branch(self):
