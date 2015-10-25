@@ -125,6 +125,19 @@ class PullRequest(ResourceBase):
         """
         return self.paginate('/commits')
 
+    @ok_or_error
+    def comments(self, commentText, parentCommentId=-1):
+        """
+        Comment on a pull request. If parentCommentId is supplied, it the comment will be
+        a child comment of the comment with the id parentCommentId.
+
+        Note: only pull request level comments are supported at the moment.
+        """
+        data = dict(text=commentText)
+        if parentCommentId is not -1:
+            data['parent'] = dict(id=parentCommentId)
+        return self._client.post(self.url("/comments"), data=data)
+
 
 class PullRequests(ResourceBase, IterableResource):
     def all(self, direction='INCOMING', at=None, state='OPEN', order=None):
