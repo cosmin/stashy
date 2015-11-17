@@ -64,10 +64,7 @@ class StashClient(object):
         if username is not None or password is not None:
             self._session.auth = (username, password)
         else:
-            if mutual_authentication is None:
-                self._session.auth = HTTPKerberosAuth()
-            else:
-                self._session.auth = HTTPKerberosAuth(mutual_authentication=mutual_authentication)
+            self._session.auth = HTTPKerberosAuth(mutual_authentication=mutual_authentication)
 
 
         self._session.cookies = self._session.head(self.url("")).cookies
