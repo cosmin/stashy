@@ -1,5 +1,6 @@
 import json
 import requests
+from requests_kerberos import HTTPKerberosAuth
 
 from .helpers import Nested, add_json_headers
 from .admin import Admin
@@ -8,11 +9,12 @@ from .ssh import Keys
 from .compat import basestring
 from .allrepos import Repos
 
+
 class Stash(object):
     _url = "/"
 
-    def __init__(self, base_url, username=None, password=None, verify=True, session=None):
-        self._client = StashClient(base_url, username, password, verify, session=session)
+    def __init__(self, base_url, username=None, password=None, verify=True, session=None, mutual_authentication=None):
+        self._client = StashClient(base_url, username, password, verify, session=session, mutual_authentication=mutual_authentication)
 
     admin = Nested(Admin)
     projects = Nested(Projects)
@@ -43,7 +45,7 @@ class StashClient(object):
     branches_api_version = '1.0'
     branches_api_path = '{0}/{1}'.format(branches_api_name, branches_api_version)
 
-    def __init__(self, base_url, username=None, password=None, verify=True, session=None):
+    def __init__(self, base_url, username=None, password=None, verify=True, session=None, mutual_authentication=None):
         assert isinstance(base_url, basestring)
 
         if base_url.endswith("/"):
@@ -61,6 +63,9 @@ class StashClient(object):
 
         if username is not None or password is not None:
             self._session.auth = (username, password)
+        else:
+            self._session.auth = HTTPKerberosAuth(mutual_authentication=mutual_authentication)
+
 
         self._session.cookies = self._session.head(self.url("")).cookies
 
