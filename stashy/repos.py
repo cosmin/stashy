@@ -150,19 +150,32 @@ class Repository(ResourceBase):
 
     @ok_or_error
     def create_branch(self, value, origin_branch='master'):
-        return self._client.post(self.url('/branches', is_branches=True),
+        return self._client.post(self.url('/branches', api_type='branches'),
                                 data=dict(name=value, startPoint=
                                 "refs/heads/%s" % origin_branch))
 
     @ok_or_error
     def delete_branch(self, value):
-        return self._client.delete(self.url('/branches', is_branches=True),
+        return self._client.delete(self.url('/branches', api_type='branches'),
                                 data=dict(name=value,
                                           dryRun='false'))
     @response_or_error
     def get_branch_info(self, changesetId):
         return self._client.get(self.url('/branches/info/%s' % changesetId,
-                                            is_branches=True))
+                                            api_type='branches'))
+
+    def keys(self):
+        """
+        Retrieve the access keys associated with the repo
+        """
+        return self.paginate('/ssh', api_type='keys')
+
+    @ok_or_error
+    def add_key(self, key_text, permission):
+        return self._client.post(self.url('/ssh', api_type='keys'),
+                                data=dict(
+                                    key=dict(text=key_text),
+                                    permission=permission))
 
     def branches(self, filterText=None, orderBy=None, details=None):
         """

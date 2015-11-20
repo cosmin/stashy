@@ -14,51 +14,67 @@ def add_json_headers(kw):
 
 
 class ResourceBase(object):
-    def __init__(self, url, client, parent, api_path=None,
-                 branches_api_path=None):
+    def __init__(self, url, client, parent,
+                 api_path=None,
+                 branches_api_path=None,
+                 keys_api_path=None):
         self._client = client
         self._parent = parent
         if api_path is None:
-            api_path = self._client.core_api_path
+            api_path          = self._client.core_api_path
             branches_api_path = self._client.branches_api_path
+            keys_api_path     = self._client.keys_api_path
         if branches_api_path is None:
             branches_api_path = self._client.branches_api_path
+        if keys_api_path is None:
+            keys_api_path = self._client.keys_api_path
 
         # make sure we're only prefixing with one api path
         if url.startswith(api_path):
-            self._url = url
+            self._url         = url
             self._branchesurl = url.replace(api_path, branches_api_path)
+            self._keysurl     = url.replace(api_path, keys_api_path)
         elif url.startswith(self._client.core_api_path):
-            self._url = url.replace(self._client.core_api_path, api_path)
+            self._url         = url.replace(self._client.core_api_path, api_path)
             self._branchesurl = url.replace(self._client.core_api_path,
                                             branches_api_path)
+            self._keysurl     = url.replace(self._client.core_api_path,
+                                            keys_api_path)
         else:
             if url.startswith('/'):
                 url = url[1:]
-            self._url = '{0}/{1}'.format(api_path, url)
+            self._url         = '{0}/{1}'.format(api_path,          url)
             self._branchesurl = '{0}/{1}'.format(branches_api_path, url)
+            self._keysurl     = '{0}/{1}'.format(keys_api_path,     url)
 
 
 
 
-    def url(self, resource_url="", is_branches=False):
+    def url(self, resource_url="", api_type=None):
         if resource_url and not resource_url.startswith("/"):
             resource_url = "/" + resource_url
-        if is_branches:
-            if self._url.endswith("/"):
-                url = self._branchesurl[:-1]
-            else :
-                url = self._branchesurl
-        else:
+        if api_type is None or api_type == 'core':
             if self._url.endswith("/"):
                 url = self._url[:-1]
             else :
                 url = self._url
+        elif api_type == 'branches':
+            if self._branchesurl.endswith("/"):
+                url = self._branchesurl[:-1]
+            else :
+                url = self._branchesurl
+        elif api_type == 'keys':
+            if self._keysurl.endswith("/"):
+                url = self._keysurl[:-1]
+            else :
+                url = self._keysurl
+        else:
+            raise ValueError('Unknown API ' + api_type)
         return url + resource_url
 
     def paginate(self, resource_url, params=None, values_key='values',
-                 is_branches=False):
-        url = self.url(resource_url, is_branches)
+                 api_type=None):
+        url = self.url(resource_url, api_type)
 
         more = True
         start = None
