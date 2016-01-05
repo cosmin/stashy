@@ -126,7 +126,7 @@ class PullRequest(ResourceBase):
         return self.paginate('/commits')
 
     @ok_or_error
-    def comments(self, commentText, parentCommentId=-1):
+    def comment(self, commentText, parentCommentId=-1):
         """
         Comment on a pull request. If parentCommentId is supplied, it the comment will be
         a child comment of the comment with the id parentCommentId.
