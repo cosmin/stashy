@@ -1,6 +1,7 @@
-from .helpers import Nested, ResourceBase, IterableResource
+from .helpers import ResourceBase, IterableResource
 from .errors import ok_or_error, response_or_error
 from .compat import basestring
+import json
 
 
 class PullRequestRef(object):
@@ -70,10 +71,22 @@ class PullRequest(ResourceBase):
         """Decline a pull request."""
         return self._client.post(self.url("/decline"), params=dict(version=version))
 
-    @ok_or_error
     def can_merge(self):
         """
         Test whether a pull request can be merged.
+
+        A pull request may not be merged if:
+
+            * there are conflicts that need to be manually resolved before merging; and/or
+            * one or more merge checks have vetoed the merge.
+        """
+        res = self.merge_info()
+        return res['canMerge'] and not res['conflicted']
+
+    @response_or_error
+    def merge_info(self):
+        """
+        Show conflicts and vetoes of pull request.
 
         A pull request may not be merged if:
 
