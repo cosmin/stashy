@@ -11,7 +11,7 @@ from .allrepos import Repos
 class Stash(object):
     _url = "/"
 
-    def __init__(self, base_url, username=None, password=None, verify=True, session=None):
+    def __init__(self, base_url, username=None, password=None, oauth=None, verify=True, session=None):
         self._client = StashClient(base_url, username, password, verify, session=session)
 
     admin = Nested(Admin)
@@ -43,7 +43,7 @@ class StashClient(object):
     branches_api_version = '1.0'
     branches_api_path = '{0}/{1}'.format(branches_api_name, branches_api_version)
 
-    def __init__(self, base_url, username=None, password=None, verify=True, session=None):
+    def __init__(self, base_url, username=None, password=None, oauth=None, verify=True, session=None):
         assert isinstance(base_url, basestring)
 
         if base_url.endswith("/"):
@@ -59,10 +59,25 @@ class StashClient(object):
         self._session = session
         self._session.verify = verify
 
-        if username is not None or password is not None:
+        if oauth is not None:
+            self._create_oauth_session(oauth)
+        elif username is not None or password is not None:
             self._session.auth = (username, password)
 
         self._session.cookies = self._session.head(self.url("")).cookies
+
+    def _create_oauth_session(self, oauth):
+        from requests_oauthlib import OAuth1
+        from oauthlib.oauth1 import SIGNATURE_RSA
+
+        oauth = OAuth1(
+            oauth['consumer_key'],
+            rsa_key=oauth['key_cert'],
+            signature_method=SIGNATURE_RSA,
+            resource_owner_key=oauth['access_token'],
+            resource_owner_secret=outh['access_token_secret']
+        )
+        self._session.auth = oauth
 
     def url(self, resource_path):
         assert isinstance(resource_path, basestring)
