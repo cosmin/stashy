@@ -65,6 +65,7 @@ class StashClient(object):
             self._session.auth = (username, password)
 
         self._session.cookies = self._session.head(self.url("")).cookies
+        self._session.headers.update({'Content-Type': 'application/json'})
 
     def _create_oauth_session(self, oauth):
         from requests_oauthlib import OAuth1
