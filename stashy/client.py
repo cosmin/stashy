@@ -12,7 +12,7 @@ class Stash(object):
     _url = "/"
 
     def __init__(self, base_url, username=None, password=None, oauth=None, verify=True, session=None):
-        self._client = StashClient(base_url, username, password, verify, session=session)
+        self._client = StashClient(base_url, username, password, oauth, verify, session=session)
 
     admin = Nested(Admin)
     projects = Nested(Projects)
