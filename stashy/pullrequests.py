@@ -126,16 +126,26 @@ class PullRequest(ResourceBase):
         return self.paginate('/commits')
 
     @ok_or_error
-    def comment(self, commentText, parentCommentId=-1):
+    def comment(self, commentText, parentCommentId=-1, srcPath=None, fileLine=-1, lineType="CONTEXT", fileType="FROM"):
         """
         Comment on a pull request. If parentCommentId is supplied, it the comment will be
         a child comment of the comment with the id parentCommentId.
 
-        Note: only pull request level comments are supported at the moment.
+        Note: see https://developer.atlassian.com/static/rest/stash/3.11.3/stash-rest.html#idp1448560
+        srcPath: (optional) The path of the file to comment on.
+        fileLine: (optional) The line of the file to comment on.
+        lineType: (optional, defaults to CONTEXT) the type of chunk that is getting commented on.
+            Either ADDED, REMOVED, or CONTEXT
+        fileType: (optional, defaults to FROM) the version of the file to comment on.
+            Either FROM, or TO
         """
         data = dict(text=commentText)
         if parentCommentId is not -1:
             data['parent'] = dict(id=parentCommentId)
+        elif srcPath is not None:
+            data['anchor'] = dict(path=srcPath, srcPath=srcPath)
+            if fileLine is not -1:
+                data['anchor'].update(dict(line=fileLine, lineType=lineType, fileType=fileType))
         return self._client.post(self.url("/comments"), data=data)
 
 
