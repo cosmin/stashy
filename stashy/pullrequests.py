@@ -125,6 +125,12 @@ class PullRequest(ResourceBase):
         """
         return self.paginate('/commits')
 
+    def comments(self, srcPath='/'):
+        """
+        Retrieve comments for the specified file in a  pull request.
+        """
+        return self.paginate('/comments?path=%s' % srcPath)
+
     @ok_or_error
     def comment(self, commentText, parentCommentId=-1):
         """
