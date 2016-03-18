@@ -1,7 +1,6 @@
 from functools import wraps
 from decorator import decorator
 
-
 class NotFoundException(Exception):
     def __init__(self, response):
         try:
@@ -22,15 +21,26 @@ class GenericException(Exception):
             self.data = response.json()
             msg = "%d: %s" % (response.status_code, self.data)
         except ValueError:
-            msg = "Unknown error: " + response.status_code
+            msg = "Unknown error: %d" % response.status_code
 
         super(GenericException, self).__init__(msg)
 
+
+class AuthenticationException(Exception):
+    def __init__(self, response):
+        try:
+            msg = "%d: Invalid User / Password" % response.status_code
+        except ValueError:
+            msg = "Invalid Authentication" 
+
+        super(AuthenticationException,self).__init__(msg)
 
 def maybe_throw(response):
     if not response.ok:
         if response.status_code == 404:
             raise NotFoundException(response)
+        elif response.status_code == 401:
+            raise AuthenticationException(response)
         else:
             e = GenericException(response)
             try:
