@@ -1,8 +1,9 @@
 from .helpers import Nested, ResourceBase, IterableResource
 from .errors import ok_or_error, response_or_error
-from .permissions import Permissions
+from .permissions import Permissions, RepositoryPermissions
 from .pullrequests import PullRequests
 from .compat import update_doc
+from .branch_permissions import BranchPermissions
 
 class Hook(ResourceBase):
     def __init__(self, key, url, client, parent):
@@ -103,16 +104,29 @@ class Repository(ResourceBase):
         return self._client.get(self.url())
 
     @response_or_error
-    def branches(self, filterText=None, orderBy=None):
+    def fork(self, name = None, project = None):
         """
-        Retrieve the branches matching the supplied filterText param.
+        Fork the repository.
+
+        name    - Specifies the forked repository's name
+                    Defaults to the name of the origin repository if not specified
+        project - Specifies the forked repository's target project by key
+                    Defaults to the current user's personal project if not specified
+        
         """
-        params = {}
-        if filterText is not None:
-            params['filterText'] = filterText
-        if orderBy is not None:
-            params['orderBy'] = orderBy
-        return self._client.get(self.url('/branches'), params=params)
+        data = dict()
+        if name is not None:
+            data['name'] = name
+        if project is not None:
+            data['project'] = {"key": project}
+            
+        return self._client.post(self.url(), data=data)
+
+    def forks(self):
+        """
+        Retrieve repositories which have been forked from this one.
+        """
+        return self.paginate('/forks')
 
     @response_or_error
     def tags(self, filterText=None, orderBy=None):
@@ -134,20 +148,64 @@ class Repository(ResourceBase):
     def _set_default_branch(self, value):
         return self._client.put(self.url('/branches/default'), data=dict(id=value))
 
+    @ok_or_error
+    def create_branch(self, value, origin_branch='master'):
+        return self._client.post(self.url('/branches', is_branches=True),
+                                data=dict(name=value, startPoint=
+                                "refs/heads/%s" % origin_branch))
+
+    @ok_or_error
+    def delete_branch(self, value):
+        return self._client.delete(self.url('/branches', is_branches=True),
+                                data=dict(name=value,
+                                          dryRun='false'))
+    @response_or_error
+    def get_branch_info(self, changesetId):
+        return self._client.get(self.url('/branches/info/%s' % changesetId,
+                                            is_branches=True))
+
+    def branches(self, filterText=None, orderBy=None, details=None):
+        """
+        Retrieve the branches matching the supplied filterText param.
+        """
+        params = {}
+        if filterText is not None:
+            params['filterText'] = filterText
+        if orderBy is not None:
+            params['orderBy'] = orderBy
+        if details is not None:
+            params['details'] = details
+        return self.paginate('/branches', params=params)
+
     default_branch = property(_get_default_branch, _set_default_branch, doc="Get or set the default branch")
 
-    def browse(self, at=None, type=False, blame='', noContent=''):
+    def files(self, path='', at=None):
+        """
+        Retrieve a page of files from particular directory of a repository. The search is done
+        recursively, so all files from any sub-directory of the specified directory will be returned.
+        """
+        params = {}
+        if at is None:
+            params['at'] = at
+        return self.paginate('/files/' + path, params)
+
+    def browse(self, path='', at=None, type=False, blame='', noContent=''):
+        """
+        Retrieve a page of content for a file path at a specified revision.
+        """
         params = {}
         if at is not None:
             params['at'] = at
-        if type is not None:
+        if type:
             params['type'] = type
-        if blame:
-            params['blame'] = blame
-        if noContent:
-            params['noContent'] = noContent
+            return response_or_error(lambda: self._client.get(self.url('/browse/' + path), params=params))()
+        else:
+            if blame:
+                params['blame'] = blame
+            if noContent:
+                params['noContent'] = noContent
 
-        return self.paginate("/browse", params=params)
+            return self.paginate("/browse/" + path, params=params, values_key='lines')
 
     def changes(self, until, since=None):
         """
@@ -182,8 +240,12 @@ class Repository(ResourceBase):
         return self.paginate('/commits', params=params)
 
     permissions = Nested(Permissions)
+    repo_permissions = Nested(RepositoryPermissions,
+                              relative_path="/permissions")
+
     pull_requests = Nested(PullRequests, relative_path="/pull-requests")
     settings = Nested(Settings)
+    branch_permissions = Nested(BranchPermissions, relative_path=None)
 
 
 class Repos(ResourceBase, IterableResource):

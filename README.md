@@ -54,6 +54,16 @@ stash.projects[PROJECT].repos.list()
 list(stash.projects[PROJECT].repos[REPO].pull_requests.commits())
 ```
 
+* List all branch restrictions for a repo
+```python
+stash.projects[PROJECT].repos[REPO].restricted.list()
+```
+
+* List all branch permission entities for a repo
+```python
+stash.projects[PROJECT].repos[REPO].permitted.list()
+```
+
 ## Implemented
 
 ```
@@ -82,10 +92,12 @@ list(stash.projects[PROJECT].repos[REPO].pull_requests.commits())
 /projects/{projectKey}/permissions/{permission}/all [GET, POST]
 /projects/{projectKey}/repos [POST, GET]
 /projects/{projectKey}/repos/{repositorySlug} [DELETE, POST, PUT, GET]
-/projects/{projectKey}/repos/{repositorySlug}/branches [GET]
+/projects/{projectKey}/repos/{repositorySlug}/branches [GET, PUT, DELETE]
 /projects/{projectKey}/repos/{repositorySlug}/branches/default [GET, PUT]
+/projects/{projectKey}/repos/{repositorySlug}/branches/info/{changesetId} [GET]
 /projects/{projectKey}/repos/{repositorySlug}/changes [GET]
 /projects/{projectKey}/repos/{repositorySlug}/commits [GET]
+/projects/{projectKey}/repos/{repositorySlug}/permissions [GET, POST,DELETE]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests [GET, POST]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId} [GET, PUT]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/activities [GET]
@@ -94,6 +106,7 @@ list(stash.projects[PROJECT].repos[REPO].pull_requests.commits())
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/reopen [POST]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/approve [POST, DELETE]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/changes [GET]
+/projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments [POST]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/commits [GET]
 /projects/{projectKey}/repos/{repositorySlug}/settings/hooks [GET]
 /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey} [GET]
@@ -122,7 +135,6 @@ list(stash.projects[PROJECT].repos[REPO].pull_requests.commits())
 /projects/{projectKey}/repos/{repositorySlug}/diff/{path:.*} [GET]
 /projects/{projectKey}/repos/{repositorySlug}/files [GET]
 /projects/{projectKey}/repos/{repositorySlug}/files/{path:.*} [GET]
-/projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments [POST]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments/{commentId} [DELETE, PUT, GET]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/diff [GET]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/diff/{path:.*} [GET]

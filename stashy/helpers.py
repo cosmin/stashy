@@ -14,23 +14,51 @@ def add_json_headers(kw):
 
 
 class ResourceBase(object):
-    def __init__(self, url, client, parent):
-        self._url = url
+    def __init__(self, url, client, parent, api_path=None,
+                 branches_api_path=None):
         self._client = client
         self._parent = parent
+        if api_path is None:
+            api_path = self._client.core_api_path
+            branches_api_path = self._client.branches_api_path
+        if branches_api_path is None:
+            branches_api_path = self._client.branches_api_path
 
-    def url(self, resource_url=""):
+        # make sure we're only prefixing with one api path
+        if url.startswith(api_path):
+            self._url = url
+            self._branchesurl = url.replace(api_path, branches_api_path)
+        elif url.startswith(self._client.core_api_path):
+            self._url = url.replace(self._client.core_api_path, api_path)
+            self._branchesurl = url.replace(self._client.core_api_path,
+                                            branches_api_path)
+        else:
+            if url.startswith('/'):
+                url = url[1:]
+            self._url = '{0}/{1}'.format(api_path, url)
+            self._branchesurl = '{0}/{1}'.format(branches_api_path, url)
+
+
+
+
+    def url(self, resource_url="", is_branches=False):
         if resource_url and not resource_url.startswith("/"):
             resource_url = "/" + resource_url
-
-        if self._url.endswith("/"):
-            url = self._url[:-1]
+        if is_branches:
+            if self._url.endswith("/"):
+                url = self._branchesurl[:-1]
+            else :
+                url = self._branchesurl
         else:
-            url = self._url
+            if self._url.endswith("/"):
+                url = self._url[:-1]
+            else :
+                url = self._url
         return url + resource_url
 
-    def paginate(self, resource_url, params=None):
-        url = self.url(resource_url)
+    def paginate(self, resource_url, params=None, values_key='values',
+                 is_branches=False):
+        url = self.url(resource_url, is_branches)
 
         more = True
         start = None
@@ -39,16 +67,17 @@ class ResourceBase(object):
             if params:
                 kw['params'] = params
             if start is not None:
-                kw['params'] = dict(start=start)
+                kw.setdefault('params', {})
+                kw['params']['start'] = start
 
             response = self._client.get(url, **kw)
             maybe_throw(response)
 
             data = response.json()
 
-            if not 'values' in data:
+            if not values_key in data:
                 return
-            for item in data['values']:
+            for item in data[values_key]:
                 yield item
 
             if data['isLastPage']:
@@ -96,13 +125,21 @@ class FilteredIterableResource(IterableResource):
 
 
 class Nested(object):
-    def __init__(self, cls, relative_path=None):
-        if relative_path:
+    def __init__(self, cls, relative_path=''):
+
+        # nested object for clarity of usage, no effect on resource url
+        if relative_path is None:
+            self.relative_path = ''
+
+        # default case, use lowercase class name
+        elif not relative_path:
+            self.relative_path = "/%s" % cls.__name__.lower()
+
+        # explicit override of relative path
+        else:
             if not relative_path.startswith("/"):
                 relative_path = "/" + relative_path
             self.relative_path = relative_path
-        else:
-            self.relative_path = "/%s" % cls.__name__.lower()
         self.cls = cls
 
     def __get__(self, instance, kind):

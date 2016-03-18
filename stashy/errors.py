@@ -21,7 +21,7 @@ class GenericException(Exception):
             self.data = response.json()
             msg = "%d: %s" % (response.status_code, self.data)
         except ValueError:
-            msg = "Unknown error: %d" % response.status_code
+            msg = "Unknown error: %d(%s)" % (response.status_code, response.reason)
 
         super(GenericException, self).__init__(msg)
 
@@ -61,4 +61,7 @@ def ok_or_error(fn, *args, **kw):
 def response_or_error(fn, *args, **kw):
     response = fn(*args, **kw)
     maybe_throw(response)
+    try:
     return response.json()
+    except ValueError:
+        return response.text

@@ -1,7 +1,10 @@
 stashy
 ======
 
-Python API client for the Atlassian Stash REST API
+Python client for the Atlassian Stash REST API. Supports Python 2.6, 2.7
+and 3.3.
+
+|Build Status|
 
 Installation
 ------------
@@ -13,7 +16,7 @@ Installation
 Usage
 -----
 
-::
+.. code:: python
 
     import stashy
     stash = stashy.connect("http://localhost:7990/stash", "admin", "admin")
@@ -23,39 +26,51 @@ Examples
 
 -  Retrieve all groups
 
-::
+.. code:: python
 
     stash.admin.groups.list()
 
 -  Retrieve all users that match a given filter
 
-::
+.. code:: python
 
     stash.admin.users.list(filter="admin")
 
 -  Add a user to a group
 
-::
+.. code:: python
 
     stash.admin.groups.add_user('stash-users', 'admin')
 
 -  Iterate over all projects (that you have access to)
 
-::
+.. code:: python
 
     stash.projects.list()
 
 -  List all the repositories in a given project
 
-::
+.. code:: python
 
     stash.projects[PROJECT].repos.list()
 
 -  List all the commits in a pull request
 
-::
+.. code:: python
 
     list(stash.projects[PROJECT].repos[REPO].pull_requests.commits())
+
+-  List all branch restrictions for a repo
+
+   .. code:: python
+
+       stash.projects[PROJECT].repos[REPO].restricted.list()
+
+-  List all branch permission entities for a repo
+
+   .. code:: python
+
+       stash.projects[PROJECT].repos[REPO].permitted.list()
 
 Implemented
 -----------
@@ -99,6 +114,7 @@ Implemented
     /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/reopen [POST]
     /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/approve [POST, DELETE]
     /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/changes [GET]
+    /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments [POST]
     /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/commits [GET]
     /projects/{projectKey}/repos/{repositorySlug}/settings/hooks [GET]
     /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey} [GET]
@@ -128,7 +144,6 @@ Not yet implemented
     /projects/{projectKey}/repos/{repositorySlug}/diff/{path:.*} [GET]
     /projects/{projectKey}/repos/{repositorySlug}/files [GET]
     /projects/{projectKey}/repos/{repositorySlug}/files/{path:.*} [GET]
-    /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments [POST]
     /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments/{commentId} [DELETE, PUT, GET]
     /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/diff [GET]
     /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/diff/{path:.*} [GET]
@@ -137,3 +152,5 @@ Not yet implemented
     /users [GET, PUT]
     /users/credentials [PUT]
 
+.. |Build Status| image:: https://travis-ci.org/RisingOak/stashy.png?branch=master
+   :target: https://travis-ci.org/RisingOak/stashy
