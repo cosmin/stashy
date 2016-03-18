@@ -62,6 +62,6 @@ def response_or_error(fn, *args, **kw):
     response = fn(*args, **kw)
     maybe_throw(response)
     try:
-    return response.json()
+        return response.json()
     except ValueError:
         return response.text
