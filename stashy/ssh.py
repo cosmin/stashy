@@ -1,6 +1,6 @@
 # from .helpers import Nested, ResourceBase, IterableResource
 from .helpers import ResourceBase, IterableResource
-# from .errors import ok_or_error, response_or_error
+from .errors import ok_or_error, response_or_error
 from .compat import update_doc
 
 
@@ -36,12 +36,23 @@ class Keys(ResourceBase, SshFilteredIterableResource):
         super(Keys, self).__init__(url, client, parent)
         self._url = 'ssh/1.0/keys'
 
+    @ok_or_error
+    def create(self, user, key, label=None):
+        """
+        Adds the key for the supplied user. If label is not set then
+        the comment part of the key is used as it.
+        """
+        data = dict(text=key, label=label)
+        params = dict(user=user)
+        return self._client.post(self.url(""), data=data, params=params)
+
+    @response_or_error
     def get(self, user):
         """
         Retrieve the keys matching the supplied user.
         """
-
-        return self._client.get(self.url(user))
+        params = dict(user=user)
+        return self._client.get(self.url(""), params=params)
 
     def __getitem__(self, item):
         return Key(item, self.url(item), self._client, self)
