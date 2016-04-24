@@ -69,7 +69,7 @@ class PullRequest(ResourceBase):
     @ok_or_error
     def decline(self, version=-1):
         """Decline a pull request."""
-        return self._client.post(self.url("/decline"), params=dict(version=version))
+        return self._client.post(self.url("/decline"), data=dict(version=version))
 
     def can_merge(self):
         """
@@ -100,14 +100,14 @@ class PullRequest(ResourceBase):
         """
         Merge the specified pull request.
         """
-        return self._client.post(self.url("/merge"), params=dict(version=version))
+        return self._client.post(self.url("/merge"), data=dict(version=version))
 
     @response_or_error
     def reopen(self, version=-1):
         """
         Re-open a declined pull request.
         """
-        return self._client.post(self.url("/reopen"), params=dict(version=version))
+        return self._client.post(self.url("/reopen"), data=dict(version=version))
 
     @response_or_error
     def approve(self):
