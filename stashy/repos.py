@@ -112,14 +112,14 @@ class Repository(ResourceBase):
                     Defaults to the name of the origin repository if not specified
         project - Specifies the forked repository's target project by key
                     Defaults to the current user's personal project if not specified
-        
+
         """
         data = dict()
         if name is not None:
             data['name'] = name
         if project is not None:
             data['project'] = {"key": project}
-            
+
         return self._client.post(self.url(), data=data)
 
     def forks(self):
@@ -232,7 +232,7 @@ class Repository(ResourceBase):
 
         Support for withCounts is not implement.
         """
-        params = dict(until=until, withCounts=False)
+        params = dict(until=until, since=since, withCounts=False)
         if since is not None:
             params['since'] = since
         if path is not None:
