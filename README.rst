@@ -1,8 +1,8 @@
 stashy
 ======
 
-Python client for the Atlassian Stash REST API. Supports Python 2.6, 2.7
-and 3.3.
+Python client for the [Atlassian Stash REST API](https://developer.atlassian.com/stash/docs/latest/reference/rest-api.html). Supports Python 2.6, 2.7 and 3.3.
+
 
 |Build Status|
 
