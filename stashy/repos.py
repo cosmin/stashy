@@ -151,8 +151,7 @@ class Repository(ResourceBase):
     @ok_or_error
     def create_branch(self, value, origin_branch='master'):
         return self._client.post(self.url('/branches', is_branches=True),
-                                data=dict(name=value, startPoint=
-                                "refs/heads/%s" % origin_branch))
+                                data=dict(name=value, startPoint=origin_branch))
 
     @ok_or_error
     def delete_branch(self, value):
