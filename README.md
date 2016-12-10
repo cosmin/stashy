@@ -1,6 +1,6 @@
 # stashy
 
-Python client for the Atlassian Stash REST API. Supports Python 2.6, 2.7 and 3.3.
+Python client for the [Atlassian Stash REST API](https://developer.atlassian.com/stash/docs/latest/reference/rest-api.html). Supports Python 2.6, 2.7 and 3.3.
 
 [![Build Status](https://travis-ci.org/RisingOak/stashy.png?branch=master)](https://travis-ci.org/RisingOak/stashy)
 
@@ -112,6 +112,7 @@ stash.projects[PROJECT].repos[REPO].permitted.list()
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/reopen [POST]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/approve [POST, DELETE]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/changes [GET]
+/projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments [POST]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/commits [GET]
 /projects/{projectKey}/repos/{repositorySlug}/settings/hooks [GET]
 /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey} [GET]
@@ -140,7 +141,6 @@ stash.projects[PROJECT].repos[REPO].permitted.list()
 /projects/{projectKey}/repos/{repositorySlug}/diff/{path:.*} [GET]
 /projects/{projectKey}/repos/{repositorySlug}/files [GET]
 /projects/{projectKey}/repos/{repositorySlug}/files/{path:.*} [GET]
-/projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments [POST]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments/{commentId} [DELETE, PUT, GET]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/diff [GET]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/diff/{path:.*} [GET]
