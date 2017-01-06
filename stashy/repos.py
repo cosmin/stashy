@@ -185,7 +185,7 @@ class Repository(ResourceBase):
         recursively, so all files from any sub-directory of the specified directory will be returned.
         """
         params = {}
-        if at is None:
+        if at is not None:
             params['at'] = at
         return self.paginate('/files/' + path, params)
 
