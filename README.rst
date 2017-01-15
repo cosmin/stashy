@@ -127,6 +127,7 @@ Implemented
     /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey} [GET]
     /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey}/enabled [PUT, DELETE]
     /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey}/settings [PUT, GET]
+    /projects/{projectKey}/repos/{repositorySlug}/settings/pull-requests [GET, POST]
     /projects/{projectKey}/repos/{repositorySlug}/tags [GET]
 
 Not yet implemented
