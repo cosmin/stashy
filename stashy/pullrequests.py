@@ -1,6 +1,8 @@
-from .helpers import Nested, ResourceBase, IterableResource
+from .helpers import ResourceBase, IterableResource
 from .errors import ok_or_error, response_or_error
 from .compat import basestring
+from .pullrequestdiffs import PullRequestDiff
+import json
 
 
 class PullRequestRef(object):
@@ -27,7 +29,6 @@ class PullRequest(ResourceBase):
         Retrieve a pull request.
         """
         return self._client.get(self.url())
-
 
     @response_or_error
     def update(self, version, title=None, description=None, reviewers=None):
@@ -68,12 +69,24 @@ class PullRequest(ResourceBase):
     @ok_or_error
     def decline(self, version=-1):
         """Decline a pull request."""
-        return self._client.post(self.url("/decline"), params=dict(version=version))
+        return self._client.post(self.url("/decline"), data=dict(version=version))
 
-    @ok_or_error
     def can_merge(self):
         """
         Test whether a pull request can be merged.
+
+        A pull request may not be merged if:
+
+            * there are conflicts that need to be manually resolved before merging; and/or
+            * one or more merge checks have vetoed the merge.
+        """
+        res = self.merge_info()
+        return res['canMerge'] and not res['conflicted']
+
+    @response_or_error
+    def merge_info(self):
+        """
+        Show conflicts and vetoes of pull request.
 
         A pull request may not be merged if:
 
@@ -87,14 +100,14 @@ class PullRequest(ResourceBase):
         """
         Merge the specified pull request.
         """
-        return self._client.post(self.url("/merge"), params=dict(version=version))
+        return self._client.post(self.url("/merge"), data=dict(version=version))
 
     @response_or_error
     def reopen(self, version=-1):
         """
         Re-open a declined pull request.
         """
-        return self._client.post(self.url("/reopen"), params=dict(version=version))
+        return self._client.post(self.url("/reopen"), data=dict(version=version))
 
     @response_or_error
     def approve(self):
@@ -125,18 +138,40 @@ class PullRequest(ResourceBase):
         """
         return self.paginate('/commits')
 
+    def comments(self, srcPath='/'):
+        """
+        Retrieve comments for the specified file in a  pull request.
+        """
+        return self.paginate('/comments?path=%s' % srcPath)
+
     @ok_or_error
-    def comments(self, commentText, parentCommentId=-1):
+    def comment(self, commentText, parentCommentId=-1, srcPath=None, fileLine=-1, lineType="CONTEXT", fileType="FROM"):
         """
         Comment on a pull request. If parentCommentId is supplied, it the comment will be
         a child comment of the comment with the id parentCommentId.
 
-        Note: only pull request level comments are supported at the moment.
+        Note: see https://developer.atlassian.com/static/rest/stash/3.11.3/stash-rest.html#idp1448560
+        srcPath: (optional) The path of the file to comment on.
+        fileLine: (optional) The line of the file to comment on.
+        lineType: (optional, defaults to CONTEXT) the type of chunk that is getting commented on.
+            Either ADDED, REMOVED, or CONTEXT
+        fileType: (optional, defaults to FROM) the version of the file to comment on.
+            Either FROM, or TO
         """
         data = dict(text=commentText)
         if parentCommentId is not -1:
             data['parent'] = dict(id=parentCommentId)
+        elif srcPath is not None:
+            data['anchor'] = dict(path=srcPath, srcPath=srcPath)
+            if fileLine is not -1:
+                data['anchor'].update(dict(line=fileLine, lineType=lineType, fileType=fileType))
         return self._client.post(self.url("/comments"), data=data)
+
+    def diff(self):
+        """
+        Retrieve the diff for the specified pull request.
+        """
+        return PullRequestDiff(self.url('/diff'), self._client, self)
 
 
 class PullRequests(ResourceBase, IterableResource):

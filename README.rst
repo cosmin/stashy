@@ -1,8 +1,8 @@
 stashy
 ======
 
-Python client for the Atlassian Stash REST API. Supports Python 2.6, 2.7
-and 3.3.
+Python client for the [Atlassian Stash REST API](https://developer.atlassian.com/stash/docs/latest/reference/rest-api.html). Supports Python 2.6, 2.7 and 3.3.
+
 
 |Build Status|
 
@@ -60,6 +60,12 @@ Examples
 
     list(stash.projects[PROJECT].repos[REPO].pull_requests.commits())
 
+-  Show the diff of a pull request
+
+.. code:: python
+
+    stash.project[PROJECT].repos[REPO].pull_requests[PULL_REQUEST].diff()
+
 -  List all branch restrictions for a repo
 
    .. code:: python
@@ -116,10 +122,12 @@ Implemented
     /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/changes [GET]
     /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments [POST]
     /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/commits [GET]
+    /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/diff [GET]
     /projects/{projectKey}/repos/{repositorySlug}/settings/hooks [GET]
     /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey} [GET]
     /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey}/enabled [PUT, DELETE]
     /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey}/settings [PUT, GET]
+    /projects/{projectKey}/repos/{repositorySlug}/settings/pull-requests [GET, POST]
     /projects/{projectKey}/repos/{repositorySlug}/tags [GET]
 
 Not yet implemented
@@ -145,7 +153,6 @@ Not yet implemented
     /projects/{projectKey}/repos/{repositorySlug}/files [GET]
     /projects/{projectKey}/repos/{repositorySlug}/files/{path:.*} [GET]
     /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments/{commentId} [DELETE, PUT, GET]
-    /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/diff [GET]
     /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/diff/{path:.*} [GET]
     /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/participants [GET, DELETE, POST]
     /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/watch [POST, DELETE]

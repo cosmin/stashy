@@ -1,6 +1,6 @@
 # stashy
 
-Python client for the Atlassian Stash REST API. Supports Python 2.6, 2.7 and 3.3.
+Python client for the [Atlassian Stash REST API](https://developer.atlassian.com/stash/docs/latest/reference/rest-api.html). Supports Python 2.6, 2.7 and 3.3.
 
 [![Build Status](https://travis-ci.org/RisingOak/stashy.png?branch=master)](https://travis-ci.org/RisingOak/stashy)
 
@@ -52,6 +52,12 @@ stash.projects[PROJECT].repos.list()
 
 ```python
 list(stash.projects[PROJECT].repos[REPO].pull_requests.commits())
+```
+
+* Show the diff of a pull request
+
+```python
+stash.project[PROJECT].repos[REPO].pull_requests[PULL_REQUEST].diff()
 ```
 
 * List all branch restrictions for a repo
@@ -112,6 +118,7 @@ stash.projects[PROJECT].repos[REPO].permitted.list()
 /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey} [GET]
 /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey}/enabled [PUT, DELETE]
 /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey}/settings [PUT, GET]
+/projects/{projectKey}/repos/{repositorySlug}/settings/pull-requests [GET, POST]
 /projects/{projectKey}/repos/{repositorySlug}/tags [GET]
 ```
 
