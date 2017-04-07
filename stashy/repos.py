@@ -4,6 +4,7 @@ from .permissions import Permissions, RepositoryPermissions
 from .pullrequests import PullRequests
 from .compat import update_doc
 from .branch_permissions import BranchPermissions
+import json
 
 class Hook(ResourceBase):
     def __init__(self, key, url, client, parent):
@@ -71,28 +72,8 @@ class Hooks(ResourceBase, IterableResource):
         return Hook(item, self.url(item), self._client, self)
 
 
-class PullRequests(ResourceBase):
-    def __init__(self, url, client, parent):
-        super(PullRequests, self).__init__(url, client, parent)
-
-    @response_or_error
-    def get(self):
-        """
-        Retrieve the settings for a pull requests workflow
-        """
-        return self._client.get(self.url())
-
-    @response_or_error
-    def configure(self, configuration=None):
-        """
-        Modify the settings for a pull requests workflow
-        """
-        return self._client.post(self.url(), data=configuration)
-
-
 class Settings(ResourceBase):
     hooks = Nested(Hooks)
-    pullrequests = Nested(PullRequests, relative_path="/pull-requests")
 
 
 class Repository(ResourceBase):
@@ -180,7 +161,7 @@ class Repository(ResourceBase):
                                 data=dict(name=value,
                                           dryRun='false'))
     @response_or_error
-    def get_branch_info(self, changesetId):
+    def _get_branch_info(self, changesetId):
         return self._client.get(self.url('/branches/info/%s' % changesetId,
                                             is_branches=True))
 
@@ -199,13 +180,31 @@ class Repository(ResourceBase):
 
     default_branch = property(_get_default_branch, _set_default_branch, doc="Get or set the default branch")
 
+    def get_all_branches(self, items):
+        """
+        Return list of all branches in this project and the repository
+        :param items: limit parameter (max items in result)
+        :return: 
+        """
+        branches = self._client.get(self.url('/branches?limit={}'.format(items)))
+        return json.loads(branches.content)
+
+    def get_commit(self, commit):
+        """
+        Returns detailed information about a given commit
+        :param commit: like "1c972ea39318a4b3ce99bc51ab03277138c586ea"
+        :return: 
+        """
+        res = self._client.get(self.url('/commits/{}'.format(commit)))
+        return json.loads(res.content)
+
     def files(self, path='', at=None):
         """
         Retrieve a page of files from particular directory of a repository. The search is done
         recursively, so all files from any sub-directory of the specified directory will be returned.
         """
         params = {}
-        if at is not None:
+        if at is None:
             params['at'] = at
         return self.paginate('/files/' + path, params)
 
