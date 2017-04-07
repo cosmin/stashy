@@ -72,8 +72,28 @@ class Hooks(ResourceBase, IterableResource):
         return Hook(item, self.url(item), self._client, self)
 
 
+class PullRequests(ResourceBase):
+    def __init__(self, url, client, parent):
+        super(PullRequests, self).__init__(url, client, parent)
+
+    @response_or_error
+    def get(self):
+        """
+        Retrieve the settings for a pull requests workflow
+        """
+        return self._client.get(self.url())
+
+    @response_or_error
+    def configure(self, configuration=None):
+        """
+        Modify the settings for a pull requests workflow
+        """
+        return self._client.post(self.url(), data=configuration)
+
+
 class Settings(ResourceBase):
     hooks = Nested(Hooks)
+    pullrequests = Nested(PullRequests, relative_path="/pull-requests")
 
 
 class Repository(ResourceBase):
@@ -161,7 +181,7 @@ class Repository(ResourceBase):
                                 data=dict(name=value,
                                           dryRun='false'))
     @response_or_error
-    def _get_branch_info(self, changesetId):
+    def get_branch_info(self, changesetId):
         return self._client.get(self.url('/branches/info/%s' % changesetId,
                                             is_branches=True))
 
@@ -204,7 +224,7 @@ class Repository(ResourceBase):
         recursively, so all files from any sub-directory of the specified directory will be returned.
         """
         params = {}
-        if at is None:
+        if at is not None:
             params['at'] = at
         return self.paginate('/files/' + path, params)
 
