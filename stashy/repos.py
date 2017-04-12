@@ -4,6 +4,7 @@ from .permissions import Permissions, RepositoryPermissions
 from .pullrequests import PullRequests
 from .compat import update_doc
 from .branch_permissions import BranchPermissions
+import json
 
 class Hook(ResourceBase):
     def __init__(self, key, url, client, parent):
@@ -198,6 +199,24 @@ class Repository(ResourceBase):
         return self.paginate('/branches', params=params)
 
     default_branch = property(_get_default_branch, _set_default_branch, doc="Get or set the default branch")
+
+    def get_all_branches(self, items):
+        """
+        Return list of all branches in this project and the repository
+        :param items: limit parameter (max items in result)
+        :return: 
+        """
+        branches = self._client.get(self.url('/branches?limit={}'.format(items)))
+        return json.loads(branches.content)
+
+    def get_commit(self, commit):
+        """
+        Returns detailed information about a given commit
+        :param commit: like "1c972ea39318a4b3ce99bc51ab03277138c586ea"
+        :return: 
+        """
+        res = self._client.get(self.url('/commits/{}'.format(commit)))
+        return json.loads(res.content)
 
     def files(self, path='', at=None):
         """
