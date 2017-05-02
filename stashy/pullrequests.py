@@ -175,6 +175,9 @@ class PullRequest(ResourceBase):
 
 
 class PullRequests(ResourceBase, IterableResource):
+    def __init__(self, url, client, parent):
+        super(PullRequests, self).__init__(url, client, parent)
+
     def all(self, direction='INCOMING', at=None, state='OPEN', order=None):
         """
         Retrieve pull requests to or from the specified repository.
@@ -234,5 +237,19 @@ class PullRequests(ResourceBase, IterableResource):
         Return a specific pull requests
         """
         return PullRequest(item, self.url(str(item)), self._client, self)
+
+    @response_or_error
+    def get(self):
+        """
+        Retrieve the settings for a pull requests workflow
+        """
+        return self._client.get(self.url())
+
+    @response_or_error
+    def configure(self, configuration=None):
+        """
+        Modify the settings for a pull requests workflow
+        """
+        return self._client.post(self.url(), data=configuration)
 
 
