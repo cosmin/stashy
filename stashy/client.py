@@ -76,7 +76,7 @@ class StashClient(object):
             rsa_key=oauth['key_cert'],
             signature_method=SIGNATURE_RSA,
             resource_owner_key=oauth['access_token'],
-            resource_owner_secret=outh['access_token_secret']
+            resource_owner_secret=oauth['access_token_secret']
         )
         self._session.auth = oauth
 
