@@ -51,7 +51,7 @@ stash.projects[PROJECT].repos.list()
 * List all the commits in a pull request
 
 ```python
-list(stash.projects[PROJECT].repos[REPO].pull_requests.commits())
+list(stash.projects[PROJECT].repos[REPO].pull_requests[PULL_REQUEST].commits())
 ```
 
 * Show the diff of a pull request
