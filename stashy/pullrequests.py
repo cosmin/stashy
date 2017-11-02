@@ -30,12 +30,27 @@ class PullRequest(ResourceBase):
         """
         return self._client.get(self.url())
 
+
+    def _make_ref(self, ref, refName):
+        if isinstance(ref, basestring):
+            repo = self.get()[refName]['repository']
+            return PullRequestRef(repo['project']['key'], repo['slug'], ref).to_dict()
+        elif isinstance(ref, PullRequestRef):
+            return ref.to_dict()
+        elif isinstance(ref, dict):
+            return ref
+        else:
+            raise ValueError(refName + " should be either a string, a dict, or a PullRequestRef")
+
+
     @response_or_error
-    def update(self, version, title=None, description=None, reviewers=None):
+    def update(self, version, title=None, description=None, reviewers=None, toRef=None, fromRef=None):
         """
-        Update the title, description or reviewers of an existing pull request.
+        Update the title, description, references or reviewers of an existing pull request.
 
         Note: the reviewers list may be updated using this resource. However the author and participants list may not.
+        toRef and fromRef might be either strings (e.g. refs/heads/master) or PullRequestRef objects.
+        If you want to change the repository of the ref, you need to use a PullRequestRef object.
         """
         data = dict(id=self._id, version=version)
         if title is not None:
@@ -44,6 +59,10 @@ class PullRequest(ResourceBase):
             data['description'] = description
         if reviewers is not None:
             data['reviewers'] = reviewers
+        if toRef is not None:
+            data['toRef'] = self._make_ref(toRef, "toRef")
+        if fromRef is not None:
+            data['fromRef'] = self._make_ref(fromRef, "fromRef")
         return self._client.put(self.url(), data=data)
 
     def activities(self, fromId=None, fromType=None):
@@ -175,6 +194,9 @@ class PullRequest(ResourceBase):
 
 
 class PullRequests(ResourceBase, IterableResource):
+    def __init__(self, url, client, parent):
+        super(PullRequests, self).__init__(url, client, parent)
+
     def all(self, direction='INCOMING', at=None, state='OPEN', order=None):
         """
         Retrieve pull requests to or from the specified repository.
@@ -234,5 +256,19 @@ class PullRequests(ResourceBase, IterableResource):
         Return a specific pull requests
         """
         return PullRequest(item, self.url(str(item)), self._client, self)
+
+    @response_or_error
+    def get(self):
+        """
+        Retrieve the settings for a pull requests workflow
+        """
+        return self._client.get(self.url())
+
+    @response_or_error
+    def configure(self, configuration=None):
+        """
+        Modify the settings for a pull requests workflow
+        """
+        return self._client.post(self.url(), data=configuration)
 
 
