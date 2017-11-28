@@ -120,6 +120,7 @@ stash.projects[PROJECT].repos[REPO].permitted.list()
 /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey}/settings [PUT, GET]
 /projects/{projectKey}/repos/{repositorySlug}/settings/pull-requests [GET, POST]
 /projects/{projectKey}/repos/{repositorySlug}/tags [GET]
+/build-status/1.0/commits/{commit-hash} [GET, POST]
 ```
 
 ## Not yet implemented
