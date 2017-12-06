@@ -3,14 +3,21 @@ from .fileinfo import FileInfo
 
 class Diff:
     def __init__(self, diff_file):
-        if diff_file["source"] is not None:
+        source_detail = diff_file.get("source", None)
+        if source_detail is not None:
             self.source = FileInfo(diff_file["source"])
         else:
             self.source = None
-        self.destination = FileInfo(diff_file["destination"])
+
+        dest_detail = diff_file.get("destination", None)
+        if dest_detail is not None:
+            self.destination = FileInfo(diff_file["destination"])
+        else:
+            self.destination = None
+
         self.hunks = diff_file["hunks"]
         self.truncated = diff_file["truncated"]
-        self.line_comments = diff_file["lineComments"]
+        self.line_comments = diff_file.get("lineComments", [])
 
     def _get_source(self):
         return self._source
