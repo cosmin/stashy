@@ -4,7 +4,7 @@ class FileInfo:
         self.parent = file_info["parent"]
         self.name = file_info["name"]
         self.extension = file_info.get("extension","")
-        self.to_string = file_info["toString"]
+        self.toString = file_info["toString"]
 
     def _get_components(self):
         return self._components
