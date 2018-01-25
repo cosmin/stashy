@@ -3,8 +3,8 @@ class FileInfo:
         self.components = file_info["components"]
         self.parent = file_info["parent"]
         self.name = file_info["name"]
-        self.extension = file_info["extension"]
-        self.to_string = file_info["toString"]
+        self.extension = file_info.get("extension","")
+        self.toString = file_info["toString"]
 
     def _get_components(self):
         return self._components

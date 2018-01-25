@@ -15,8 +15,8 @@ class Diff:
         else:
             self.destination = None
 
-        self.hunks = diff_file["hunks"]
-        self.truncated = diff_file["truncated"]
+        self.hunks = diff_file.get("hunks", [])
+        self.truncated = diff_file.get("truncated", [])
         self.line_comments = diff_file.get("lineComments", [])
 
     def _get_source(self):
