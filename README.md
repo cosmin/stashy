@@ -1,6 +1,6 @@
 # stashy
 
-Python client for the [Atlassian Stash REST API](https://developer.atlassian.com/stash/docs/latest/reference/rest-api.html). Supports Python 2.6, 2.7 and 3.3.
+Python client for the Atlassian Bitbucket Server (formerly known as Stash) [REST API](https://docs.atlassian.com/bitbucket-server/rest/5.7.0/bitbucket-rest.html). Supports Python 2.6, 2.7 and 3.3.
 
 [![Build Status](https://travis-ci.org/RisingOak/stashy.png?branch=master)](https://travis-ci.org/RisingOak/stashy)
 
