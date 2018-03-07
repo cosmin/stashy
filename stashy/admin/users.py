@@ -51,14 +51,14 @@ class Users(ResourceBase, FilteredIterableResource):
     @ok_or_error
     def add_group(self, user, group):
         """
-        Add the given user to the given user.
+        Add the given group to the given user.
         """
         return self._client.post(self.url("/add-group"), dict(context=user, itemName=group))
 
     @ok_or_error
     def remove_group(self, user, group):
         """
-        Remove the given user from the given group.
+        Remove the given group from the given user.
         """
         return self._client.post(self.url("/remove-group"), dict(context=user, itemName=group))
 
