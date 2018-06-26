@@ -11,8 +11,8 @@ from .allrepos import Repos
 class Stash(object):
     _url = "/"
 
-    def __init__(self, base_url, username=None, password=None, oauth=None, verify=True, session=None):
-        self._client = StashClient(base_url, username, password, oauth, verify, session=session)
+    def __init__(self, base_url, username=None, password=None, oauth=None, verify=True, token=None, session=None):
+        self._client = StashClient(base_url, username, password, oauth, verify, token, session=session)
 
     admin = Nested(Admin)
     projects = Nested(Projects)
@@ -43,7 +43,7 @@ class StashClient(object):
     branches_api_version = '1.0'
     branches_api_path = '{0}/{1}'.format(branches_api_name, branches_api_version)
 
-    def __init__(self, base_url, username=None, password=None, oauth=None, verify=True, session=None):
+    def __init__(self, base_url, username=None, password=None, oauth=None, verify=True, token=None, session=None):
         assert isinstance(base_url, basestring)
 
         if base_url.endswith("/"):
@@ -63,6 +63,8 @@ class StashClient(object):
             self._create_oauth_session(oauth)
         elif username is not None or password is not None:
             self._session.auth = (username, password)
+        elif token is not None:
+            self._session.headers.update({'Authorization': 'Bearer {}'.format(token)})
 
         self._session.cookies = self._session.head(self.url("")).cookies
         self._session.headers.update({'Content-Type': 'application/json'})
