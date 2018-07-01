@@ -190,6 +190,15 @@ class Repository(ResourceBase):
         branches = self._client.get(self.url('/branches?limit={}'.format(items)))
         return json.loads(branches.content)
 
+    def get_all_tags(self, items):
+        """
+        Return list of all tags in this project and the repository
+        :param items: limit parameter (max items in result)
+        :return:
+        """
+        tags = self._client.get(self.url('/tags?limit={}'.format(items)))
+        return json.loads(tags.content)
+
     def get_commit(self, commit):
         """
         Returns detailed information about a given commit
