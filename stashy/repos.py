@@ -125,11 +125,12 @@ class Webhooks(ResourceBase, IterableResource):
         return self.paginate("", params=params)
 
     @response_or_error
-    def create(self, name, url, events=["repo:refs_changed"]):
+    def create(self, name, url, events=["repo:refs_changed"], active=True):
         """
         Create a webhook with the given name and url
         """
         return self._client.post(self.url(), data={"name": name,
+                                                   "active": active,
                                                    "events": events,
                                                    "url": url
                                                    })
