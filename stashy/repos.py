@@ -171,7 +171,7 @@ class Repository(ResourceBase):
 
         The repository's slug is derived from its name. If the name changes the slug may also change.
         """
-        return self._client.post(self.url(), data=dict(name=name))
+        return self._client.put(self.url(), data=dict(name=name))
 
     @response_or_error
     def get(self):
