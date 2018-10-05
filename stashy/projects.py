@@ -36,7 +36,7 @@ class Project(ResourceBase):
         if public is not None:
             data['public'] = public
 
-        return self._client.post(self.url(), data)
+        return self._client.put(self.url(), data)
 
     @response_or_error
     def get(self):
