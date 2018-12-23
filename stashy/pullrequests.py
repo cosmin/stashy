@@ -197,7 +197,7 @@ class PullRequests(ResourceBase, IterableResource):
     def __init__(self, url, client, parent):
         super(PullRequests, self).__init__(url, client, parent)
 
-    def all(self, direction='INCOMING', at=None, state='OPEN', order=None):
+    def all(self, direction='INCOMING', at=None, state='OPEN', order=None, author=None):
         """
         Retrieve pull requests to or from the specified repository.
 
@@ -219,6 +219,9 @@ class PullRequests(ResourceBase, IterableResource):
             params['state'] = state
         if order is not None:
             params['order'] = order
+        if author is not None:
+            params['role.1'] = 'AUTHOR'
+            params['username.1'] = author
 
         return self.paginate("", params=params)
 
