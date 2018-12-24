@@ -111,6 +111,7 @@ stash.projects[PROJECT].repos[REPO].permitted.list()
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/merge [GET, POST]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/reopen [POST]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/approve [POST, DELETE]
+/projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/watch [POST, DELETE]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/changes [GET]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments [POST]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/commits [GET]
@@ -147,7 +148,6 @@ stash.projects[PROJECT].repos[REPO].permitted.list()
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/diff [GET]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/diff/{path:.*} [GET]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/participants [GET, DELETE, POST]
-/projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/watch [POST, DELETE]
 /users [GET, PUT]
 /users/credentials [PUT]
 ```
