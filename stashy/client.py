@@ -7,6 +7,7 @@ from .projects import Projects
 from .ssh import Keys
 from .compat import basestring
 from .allrepos import Repos
+from .builds import Build
 
 class Stash(object):
     _url = "/"
