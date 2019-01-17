@@ -7,6 +7,7 @@ from .projects import Projects
 from .ssh import Keys
 from .compat import basestring
 from .allrepos import Repos
+from .builds import Build
 
 class Stash(object):
     _url = "/"
@@ -30,6 +31,12 @@ class Stash(object):
         Consider using stash.admin.users instead.
         """
         return self.admin.users.get(filter)
+
+    def build(self, git_hash):
+        """
+        Get build information for a commit.
+        """
+        return Build("", self._client, git_hash)
 
 
 class StashClient(object):
