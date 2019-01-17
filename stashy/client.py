@@ -32,6 +32,12 @@ class Stash(object):
         """
         return self.admin.users.get(filter)
 
+    def build(self, git_hash):
+        """
+        Get build information for a commit.
+        """
+        return Build("", self._client, git_hash)
+
 
 class StashClient(object):
 
