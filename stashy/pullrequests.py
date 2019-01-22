@@ -135,14 +135,16 @@ class PullRequest(ResourceBase):
         """
         Approve a pull request as the current user. Implicitly adds the user as a participant if they are not already.
         """
-        return self._client.post(self.url("/approve"))
+        data = dict(approved=True, status="approved")
+        return self._client.put(self.url("/participants/%s/" % self._client._session.auth[0]), data=data)
 
     @response_or_error
     def unapprove(self):
         """
         Remove approval from a pull request as the current user. This does not remove the user as a participant.
         """
-        return self._client.delete(self.url("/approve"))
+        data = dict(approved=False, status="unapproved")
+        return self._client.put(self.url("/participants/%s/" % self._client._session.auth[0]), data=data)
 
     @response_or_error
     def watch(self):
