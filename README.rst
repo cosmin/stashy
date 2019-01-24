@@ -4,7 +4,7 @@ stashy
 Python client for the [Atlassian Stash REST API](https://developer.atlassian.com/stash/docs/latest/reference/rest-api.html). Supports Python 2.6, 2.7 and 3.3.
 
 
-|Build Status|
+|Build Status| |PyPI version| |conda-forge| |Python Versions|
 
 Installation
 ------------
@@ -159,5 +159,16 @@ Not yet implemented
     /users [GET, PUT]
     /users/credentials [PUT]
 
-.. |Build Status| image:: https://travis-ci.org/RisingOak/stashy.png?branch=master
-   :target: https://travis-ci.org/RisingOak/stashy
+.. |Build Status| image:: https://travis-ci.org/cosmin/stashy.png?branch=master
+   :target: https://travis-ci.org/cosmin/stashy
+   
+.. |PyPI version| image:: https://img.shields.io/pypi/v/stashy.svg
+    :target: https://pypi.org/project/stashy
+
+.. |conda-forge| image:: https://img.shields.io/conda/vn/conda-forge/stashy.svg
+    :target: https://anaconda.org/conda-forge/stashy
+    
+.. |Python Versions| image:: https://img.shields.io/pypi/pyversions/stashy.svg
+    :target: https://pypi.org/project/stashy
+    
+   
