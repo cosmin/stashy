@@ -5,7 +5,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(name='stashy',
-      version="0.6",
+      version="0.7",
       description='Python API client for the  Atlassian Bitbucket Server (formerly known as Stash) REST API',
       long_description=read('README.md'),
       url='http://github.com/cosmin/stashy',
