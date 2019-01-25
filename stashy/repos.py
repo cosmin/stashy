@@ -228,6 +228,19 @@ class Repository(ResourceBase):
             params['orderBy'] = orderBy
         return self.paginate('/tags', params=params)
 
+    @ok_or_error
+    def create_tag(self, name, startPoint, force='true', message='no message', type='ANNOTATED'):
+        return self._client.post(self.url('/tags', is_git=True),
+                                data=dict(force=force,
+                                          message=message,
+                                          name=name,
+                                          startPoint=startPoint,
+                                          type=type))
+
+    @ok_or_error
+    def delete_tag(self, name):
+        return self._client.delete(self.url('/tags/'+name, is_git=True))
+
     @response_or_error
     def _get_default_branch(self):
         return self._client.get(self.url('/branches/default'))
