@@ -54,6 +54,9 @@ class StashClient(object):
     git_api_version = '1.0'
     git_api_path = '{0}/{1}'.format(git_api_name, git_api_version)
 
+    sync_api_name = 'sync'
+    sync_api_version = 'latest'
+    sync_api_path = '{0}/{1}'.format(sync_api_name, sync_api_version)
 
     def __init__(self, base_url, username=None, password=None, oauth=None, verify=True, token=None, session=None):
         assert isinstance(base_url, basestring)

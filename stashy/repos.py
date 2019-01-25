@@ -174,6 +174,13 @@ class Repository(ResourceBase):
         return self._client.put(self.url(), data=dict(name=name))
 
     @response_or_error
+    def move(self, newProject):
+        """
+        Create a repository with the given name
+        """
+        return self._client.put(self.url(), data=dict(project=dict(key=newProject)))
+
+    @response_or_error
     def get(self):
         """
         Retrieve the repository
@@ -189,14 +196,14 @@ class Repository(ResourceBase):
                     Defaults to the name of the origin repository if not specified
         project - Specifies the forked repository's target project by key
                     Defaults to the current user's personal project if not specified
-        
+
         """
         data = dict()
         if name is not None:
             data['name'] = name
         if project is not None:
             data['project'] = {"key": project}
-            
+
         return self._client.post(self.url(), data=data)
 
     def forks(self):
@@ -253,6 +260,11 @@ class Repository(ResourceBase):
     def create_branch(self, value, origin_branch='master'):
         return self._client.post(self.url('/branches', is_branches=True),
                                 data=dict(name=value, startPoint=origin_branch))
+
+    @ok_or_error
+    def update_sync(self, value):
+        return self._client.post(self.url('/', is_sync=True),
+                                data=dict(enabled=value))
 
     @ok_or_error
     def delete_branch(self, value):
