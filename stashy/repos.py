@@ -1,75 +1,13 @@
-from .helpers import Nested, ResourceBase, IterableResource
-from .errors import ok_or_error, response_or_error
-from .permissions import Permissions, RepositoryPermissions
-from .pullrequests import PullRequests
-from .compat import update_doc
-from .branch_permissions import BranchPermissions
 import json
 
-class Hook(ResourceBase):
-    def __init__(self, key, url, client, parent):
-        super(Hook, self).__init__(url, client, parent)
-        self._key = key
+from .branch_permissions import BranchPermissions
+from .compat import update_doc
+from .errors import ok_or_error, response_or_error
+from .helpers import Nested, ResourceBase, IterableResource
+from .permissions import Permissions, RepositoryPermissions
+from .pullrequests import PullRequests
+from .settings import Settings
 
-    @response_or_error
-    def get(self):
-        """
-        Retrieve a repository hook
-        """
-        return self._client.get(self.url())
-
-    @response_or_error
-    def enable(self, configuration=None):
-        """
-        Enable a repository hook, optionally applying new configuration.
-        """
-        return self._client.put(self.url("/enabled"), data=configuration)
-
-    @response_or_error
-    def disable(self):
-        """
-        Disable a repository hook
-        """
-        return self._client.delete(self.url("/enabled"))
-
-    @response_or_error
-    def settings(self):
-        """
-        Retrieve the settings for a repository hook
-        """
-        return self._client.get(self.url("/settings"))
-
-    @response_or_error
-    def configure(self, configuration):
-        """
-        Modify the settings for a repository hook
-        """
-        return self._client.put(self.url("/settings"), data=configuration)
-
-
-class Hooks(ResourceBase, IterableResource):
-    def all(self, type=None):
-        """
-        Retrieve hooks for this repository, optionally filtered by type.
-
-        type: Valid values are PRE_RECEIVE or POST_RECEIVE
-        """
-        params=None
-        if type is not None:
-            params = dict(type=type)
-        return self.paginate("", params=params)
-
-    def list(self, type=None):
-        """
-        Convenience method to return a list (rather than iterable) of all elements
-        """
-        return list(self.all(type=type))
-
-    def __getitem__(self, item):
-        """
-        Return a :class:`Hook` object for operations on a specific hook
-        """
-        return Hook(item, self.url(item), self._client, self)
 
 class Webhook(ResourceBase):
     def __init__(self, key, url, client, parent):
@@ -119,7 +57,7 @@ class Webhooks(ResourceBase, IterableResource):
 
         type: Valid values are PRE_RECEIVE or POST_RECEIVE
         """
-        params=None
+        params = None
         if type is not None:
             params = dict(type=type)
         return self.paginate("", params=params)
@@ -147,10 +85,6 @@ class Webhooks(ResourceBase, IterableResource):
         """
         return Webhook(item, self.url(item), self._client, self)
 
-class Settings(ResourceBase):
-    hooks = Nested(Hooks)
-    pullrequests = Nested(PullRequests, relative_path="/pull-requests")
-
 
 class Repository(ResourceBase):
     def __init__(self, slug, url, client, parent):
@@ -176,7 +110,7 @@ class Repository(ResourceBase):
     @response_or_error
     def move(self, newProject):
         """
-        Create a repository with the given name
+        Move the repository to the given project
         """
         return self._client.put(self.url(), data=dict(project=dict(key=newProject)))
 
@@ -188,7 +122,7 @@ class Repository(ResourceBase):
         return self._client.get(self.url())
 
     @response_or_error
-    def fork(self, name = None, project = None):
+    def fork(self, name=None, project=None):
         """
         Fork the repository.
 
@@ -238,15 +172,15 @@ class Repository(ResourceBase):
     @ok_or_error
     def create_tag(self, name, startPoint, force='true', message='no message', type='ANNOTATED'):
         return self._client.post(self.url('/tags', is_git=True),
-                                data=dict(force=force,
-                                          message=message,
-                                          name=name,
-                                          startPoint=startPoint,
-                                          type=type))
+                                 data=dict(force=force,
+                                           message=message,
+                                           name=name,
+                                           startPoint=startPoint,
+                                           type=type))
 
     @ok_or_error
     def delete_tag(self, name):
-        return self._client.delete(self.url('/tags/'+name, is_git=True))
+        return self._client.delete(self.url('/tags/' + name, is_git=True))
 
     @response_or_error
     def _get_default_branch(self):
@@ -259,22 +193,23 @@ class Repository(ResourceBase):
     @ok_or_error
     def create_branch(self, value, origin_branch='master'):
         return self._client.post(self.url('/branches', is_branches=True),
-                                data=dict(name=value, startPoint=origin_branch))
+                                 data=dict(name=value, startPoint=origin_branch))
 
     @ok_or_error
     def update_sync(self, value):
         return self._client.post(self.url('/', is_sync=True),
-                                data=dict(enabled=value))
+                                 data=dict(enabled=value))
 
     @ok_or_error
     def delete_branch(self, value):
         return self._client.delete(self.url('/branches', is_branches=True),
-                                data=dict(name=value,
-                                          dryRun='false'))
+                                   data=dict(name=value,
+                                             dryRun='false'))
+
     @response_or_error
     def get_branch_info(self, changesetId):
         return self._client.get(self.url('/branches/info/%s' % changesetId,
-                                            is_branches=True))
+                                         is_branches=True))
 
     def branches(self, filterText=None, orderBy=None, details=None):
         """

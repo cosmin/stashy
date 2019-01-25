@@ -1,8 +1,9 @@
+from .compat import update_doc
+from .errors import ok_or_error, response_or_error
 from .helpers import Nested, ResourceBase, IterableResource
 from .permissions import ProjectPermissions
-from .errors import ok_or_error, response_or_error
 from .repos import Repos
-from .compat import update_doc
+from .settings import Settings
 
 
 class Project(ResourceBase):
@@ -44,6 +45,7 @@ class Project(ResourceBase):
 
     permissions = Nested(ProjectPermissions, relative_path="/permissions")
     repos = Nested(Repos)
+    settings = Nested(Settings)
 
 
 class Projects(ResourceBase, IterableResource):
@@ -56,7 +58,6 @@ class Projects(ResourceBase, IterableResource):
 
     def __getitem__(self, item):
         return Project(item, self.url(item), self._client, self)
-
 
     @response_or_error
     def create(self, key, name, description='', avatar=None):
