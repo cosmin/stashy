@@ -205,6 +205,18 @@ class Repository(ResourceBase):
         """
         return self.paginate('/forks')
 
+    def keys(self):
+        """
+        Retrieve the access keys associated with the repo
+        """
+        return self.paginate('/ssh', api_type='keys')
+
+    @ok_or_error
+    def add_key(self, key_text, permission):
+        return self._client.post(self.url('/ssh', api_type='keys'),
+                                 data=dict(key=dict(text=key_text),
+                                           permission=permission))
+
     def tags(self, filterText=None, orderBy=None):
         """
         Retrieve the tags matching the supplied filterText param.
