@@ -3,8 +3,8 @@
 Python client for the Atlassian Bitbucket Server (formerly known as Stash) [REST API](https://docs.atlassian.com/bitbucket-server/rest/5.7.0/bitbucket-rest.html). Supports Python 2.6, 2.7, 3.5, 3.6 and 3.7
 
 [![Build Status](https://travis-ci.org/cosmin/stashy.png?branch=master)](https://travis-ci.org/cosmin/stashy)
-[![PyPI version](https://img.shields.io/pypi/v/stashy.svg)](https://pypi.org/project/stashy)]
-[![conda-forge](https://img.shields.io/conda/vn/conda-forge/stashy.svg)](https://anaconda.org/conda-forge/stashy)]
+[![PyPI version](https://img.shields.io/pypi/v/stashy.svg)](https://pypi.org/project/stashy)
+[![conda-forge](https://img.shields.io/conda/vn/conda-forge/stashy.svg)](https://anaconda.org/conda-forge/stashy)
 
 
 ## Installation
