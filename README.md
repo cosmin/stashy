@@ -60,7 +60,7 @@ list(stash.projects[PROJECT].repos[REPO].pull_requests[PULL_REQUEST].commits())
 * Show the diff of a pull request
 
 ```python
-stash.project[PROJECT].repos[REPO].pull_requests[PULL_REQUEST].diff()
+stash.projects[PROJECT].repos[REPO].pull_requests[PULL_REQUEST].diff()
 ```
 
 * List all branch restrictions for a repo
