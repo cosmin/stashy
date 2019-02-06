@@ -1,4 +1,5 @@
 from .branch_permissions import BranchPermissions
+from .default_reviewers import DefaultReviewers
 from .compat import update_doc
 from .errors import ok_or_error, response_or_error
 from .helpers import Nested, ResourceBase, IterableResource
@@ -48,6 +49,7 @@ class Project(ResourceBase):
     repos = Nested(Repos)
     settings = Nested(Settings)
     branch_permissions = Nested(BranchPermissions, relative_path=None)
+    default_reviewers = Nested(DefaultReviewers, relative_path=None)
 
 
 class Projects(ResourceBase, IterableResource):
