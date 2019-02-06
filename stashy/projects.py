@@ -1,3 +1,4 @@
+from .branch_permissions import BranchPermissions
 from .compat import update_doc
 from .errors import ok_or_error, response_or_error
 from .helpers import Nested, ResourceBase, IterableResource
@@ -46,6 +47,7 @@ class Project(ResourceBase):
     permissions = Nested(ProjectPermissions, relative_path="/permissions")
     repos = Nested(Repos)
     settings = Nested(Settings)
+    branch_permissions = Nested(BranchPermissions, relative_path=None)
 
 
 class Projects(ResourceBase, IterableResource):
