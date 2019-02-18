@@ -124,7 +124,7 @@ class ProjectPermissions(Permissions):
             * PROJECT_ADMIN
 
         """
-        return self._client.post(self._url_for(permission), params=dict(allow=False))
+        return self._client.delete(self._url_for(permission), params=dict(allow=False))
 
 class RepositoryPermissions(Permissions):
     def _url_for(self):
@@ -158,7 +158,7 @@ class RepositoryPermissions(Permissions):
             * REPO_ADMIN
 
         """
-        return self._client.post(self._url_for(), params=dict(name=user))
+        return self._client.delete(self._url_for(), params=dict(name=user))
 
 
 update_doc(Groups.all, """
