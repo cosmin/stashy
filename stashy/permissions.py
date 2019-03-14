@@ -100,6 +100,12 @@ class ProjectPermissions(Permissions):
     def _url_for(self, permission):
         return self.url().rstrip("/") + "/" + permission + "/all"
 
+    def _url_for_users(self):
+        return self.url().rstrip("/") + "/users"
+
+    def _url_for_groups(self):
+        return self.url().rstrip("/") + "/groups"
+
     @ok_or_error
     def grant(self, permission):
         """
@@ -126,9 +132,60 @@ class ProjectPermissions(Permissions):
         """
         return self._client.delete(self._url_for(permission), params=dict(allow=False))
 
+    @ok_or_error
+    def grant_to_user(self, user, permission):
+        """
+        Grant a project permission to a single user, i.e. set the default permission.
+
+        project permissions:
+            * PROJECT_READ
+            * PROJECT_WRITE
+            * PROJECT_ADMIN
+
+        """
+        return self._client.put(self._url_for_users(), params=dict(name=user,
+                                                                        permission=permission))
+
+    @ok_or_error
+    def revoke_from_user(self, user):
+        """
+        Revoke all project permissions from a user.
+
+        """
+        return self._client.delete(self._url_for_users(), params=dict(name=user))
+
+    @ok_or_error
+    def grant_to_group(self, group, permission):
+        """
+        Grant a project permission to a single group, i.e. set the default permission.
+
+        project permissions:
+            * PROJECT_READ
+            * PROJECT_WRITE
+            * PROJECT_ADMIN
+
+        """
+        return self._client.put(self._url_for_groups(), params=dict(name=group,
+                                                                        permission=permission))
+
+    @ok_or_error
+    def revoke_from_group(self, group):
+        """
+        Revoke all project permissions from a group.
+
+        """
+        return self._client.delete(self._url_for_groups(), params=dict(name=group))
+
+
 class RepositoryPermissions(Permissions):
     def _url_for(self):
         return self.url().rstrip("/") + "/users"
+
+    def _url_for_users(self):
+        return self.url().rstrip("/") + "/users"
+
+    def _url_for_groups(self):
+        return self.url().rstrip("/") + "/groups"
 
     @ok_or_error
     def grant(self, user, permission):
@@ -141,10 +198,9 @@ class RepositoryPermissions(Permissions):
             * REPO_WRITE
             * REPO_ADMIN
 
-
         """
         return self._client.put(self._url_for(), params=dict(name=user,
-                                                              permission=permission))
+                                                             permission=permission))
 
     @ok_or_error
     def revoke(self, user):
@@ -159,6 +215,51 @@ class RepositoryPermissions(Permissions):
 
         """
         return self._client.delete(self._url_for(), params=dict(name=user))
+
+    @ok_or_error
+    def grant_to_user(self, user, permission):
+        """
+        Grant a repository permission to a single user, i.e. set the default permission.
+
+        repository permissions:
+            * REPO_READ
+            * REPO_WRITE
+            * REPO_ADMIN
+
+        """
+        return self._client.put(self._url_for_users(), params=dict(name=user,
+                                                              permission=permission))
+
+    @ok_or_error
+    def revoke_from_user(self, user):
+        """
+        Revoke all repository permissions from a user.
+
+        """
+        return self._client.delete(self._url_for_users(), params=dict(name=user))
+
+
+    @ok_or_error
+    def grant_to_group(self, group, permission):
+        """
+        Grant a repository permission to a single group, i.e. set the default permission.
+
+        repository permissions:
+            * REPO_READ
+            * REPO_WRITE
+            * REPO_ADMIN
+
+        """
+        return self._client.put(self._url_for_groups(), params=dict(name=group,
+                                                              permission=permission))
+
+    @ok_or_error
+    def revoke_from_group(self, group):
+        """
+        Revoke all repository permissions from a group.
+
+        """
+        return self._client.delete(self._url_for_groups(), params=dict(name=group))
 
 
 update_doc(Groups.all, """
