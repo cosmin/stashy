@@ -106,7 +106,7 @@ class ResourceBase(object):
             for item in data[values_key]:
                 yield item
 
-            if data['isLastPage']:
+            if data['isLastPage'] or data['nextPageStart'] == None:
                 more = False
             else:
                 more = True
