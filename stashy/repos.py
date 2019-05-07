@@ -253,6 +253,15 @@ class Repository(ResourceBase):
         res = self._client.get(self.url('/commits/{}'.format(commit)))
         return json.loads(res.content)
 
+    def get_commit_pull_requests(self, commit):
+        """
+        Returns list of pull requests that "commit" is a part of
+        :param commit: like "1c972ea39318a4b3ce99bc51ab03277138c586ea"
+        :return:
+        """
+        res = self._client.get(self.url('/commits/{}/pull-requests'.format(commit)))
+        return json.loads(res.content)
+
     def files(self, path='', at=None):
         """
         Retrieve a page of files from particular directory of a repository. The search is done
