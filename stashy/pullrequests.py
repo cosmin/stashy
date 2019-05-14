@@ -147,6 +147,14 @@ class PullRequest(ResourceBase):
         return self._client.put(self.url("/participants/%s/" % self._client._session.auth[0]), data=data)
 
     @response_or_error
+    def needswork(self):
+        """
+        Set 'needs work' flag to a pull request as the current user. Implicitly adds the user as a participant if they are not already.
+        """
+        data = dict(approved=False, status="needs_work")
+        return self._client.put(self.url("/participants/%s/" % self._client._session.auth[0]), data=data)
+
+    @response_or_error
     def watch(self):
         """
         Add the current user as a watcher for the pull request.
