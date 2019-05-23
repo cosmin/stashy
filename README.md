@@ -130,7 +130,10 @@ stash.projects[PROJECT].repos[REPO].permitted.list()
 /projects/{projectKey}/repos/{repositorySlug}/settings/pull-requests [GET, POST]
 /projects/{projectKey}/repos/{repositorySlug}/tags [GET, POST, DELETE]
 /build-status/1.0/commits/{commit-hash} [GET, POST]
-sync/latest/projects/{projectKey}/repos/{repositorySlug} [POST]
+/keys/1.0/projects/{projectKey}/ssh [GET, POST]
+/keys/1.0/projects/{projectKey}/repos/{repositorySlug}/ssh [GET, POST]
+/ssh/1.0/keys [GET, POST]
+/sync/latest/projects/{projectKey}/repos/{repositorySlug} [POST]
 ```
 
 ## Not yet implemented
@@ -159,4 +162,9 @@ sync/latest/projects/{projectKey}/repos/{repositorySlug} [POST]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/participants [GET, DELETE, POST]
 /users [GET, PUT]
 /users/credentials [PUT]
+/keys/1.0/projects/{projectKey}/ssh/{keyId} [GET, DELETE]
+/keys/1.0/projects/{projectKey}/repos/{repositorySlug}/ssh/{keyId} [GET, DELETE]
+/ssh/1.0/keys [DELETE]
+/ssh/1.0/keys/{keyId} [DELETE]
+/ssh/1.0/settings [GET]
 ```
