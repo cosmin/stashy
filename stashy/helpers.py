@@ -15,7 +15,7 @@ def add_json_headers(kw):
 
 class ResourceBase(object):
     def __init__(self, url, client, parent, api_path=None,
-                 branches_api_path=None, git_api_path=None, sync_api_path=None):
+                 branches_api_path=None, git_api_path=None, sync_api_path=None, keys_api_path=None):
         self._client = client
         self._parent = parent
         if api_path is None:
@@ -23,13 +23,15 @@ class ResourceBase(object):
             branches_api_path = self._client.branches_api_path
             git_api_path = self._client.git_api_path
             sync_api_path = self._client.sync_api_path
+            keys_api_path = self._client.keys_api_path
         if branches_api_path is None:
             branches_api_path = self._client.branches_api_path
         if git_api_path is None:
             git_api_path = self._client.git_api_path
-
         if sync_api_path is None:
             sync_api_path = self._client.sync_api_path
+        if keys_api_path is None:
+            keys_api_path = self._client.keys_api_path
 
         # make sure we're only prefixing with one api path
         if url.startswith(api_path):
@@ -37,6 +39,7 @@ class ResourceBase(object):
             self._branchesurl = url.replace(api_path, branches_api_path)
             self._giturl = url.replace(api_path, git_api_path)
             self._syncurl = url.replace(api_path, sync_api_path)
+            self._keysurl = url.replace(api_path, keys_api_path)
         elif url.startswith(self._client.core_api_path):
             self._url = url.replace(self._client.core_api_path, api_path)
             self._branchesurl = url.replace(self._client.core_api_path,
@@ -44,6 +47,7 @@ class ResourceBase(object):
             self._giturl = url.replace(self._client.core_api_path,
                                             git_api_path)
             self._syncurl = url.replace(self._client.core_api_path, sync_api_path)
+            self._keysurl = url.replace(self._client.core_api_path, keys_api_path)
 
         else:
             if url.startswith('/'):
@@ -52,11 +56,12 @@ class ResourceBase(object):
             self._branchesurl = '{0}/{1}'.format(branches_api_path, url)
             self._giturl = '{0}/{1}'.format(git_api_path, url)
             self._syncurl = '{0}/{1}'.format(sync_api_path, url)
+            self._keysurl = '{0}/{1}'.format(keys_api_path, url)
 
 
 
 
-    def url(self, resource_url="", is_branches=False, is_git=False, is_sync=False):
+    def url(self, resource_url="", is_branches=False, is_git=False, is_sync=False, is_keys=False):
         if resource_url and not resource_url.startswith("/"):
             resource_url = "/" + resource_url
         if is_branches:
@@ -74,6 +79,11 @@ class ResourceBase(object):
                 url = self._syncurl[:-1]
             else :
                 url = self._syncurl
+        elif is_keys:
+            if self._url.endswith("/"):
+                url = self._keysurl[:-1]
+            else :
+                url = self._keysurl
         else:
             if self._url.endswith("/"):
                 url = self._url[:-1]
@@ -83,8 +93,8 @@ class ResourceBase(object):
         return url + resource_url
 
     def paginate(self, resource_url, params=None, values_key='values',
-                 is_branches=False, is_git=False):
-        url = self.url(resource_url, is_branches, is_git)
+                 is_branches=False, is_git=False, is_keys=False):
+        url = self.url(resource_url, is_branches=is_branches, is_git=is_git, is_keys=is_keys)
 
         more = True
         start = None
