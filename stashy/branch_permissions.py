@@ -2,9 +2,23 @@ from .helpers import ResourceBase, IterableResource, Nested
 from .errors import ok_or_error, response_or_error
 from .compat import update_doc
 
+from enum import Enum
+
 API_NAME = 'branch-permissions'
 API_VERSION = '2.0'
 API_OVERRIDE_PATH = '{0}/{1}'.format(API_NAME, API_VERSION)
+
+class Matcher(Enum):
+    PATTERN='PATTERN'
+    BRANCH='BRANCH'
+    MODEL_CATEGORY='MODEL_CATEGORY'
+    MODEL_BRANCH='MODEL_BRANCH'
+
+class RestrictionType(Enum):
+    PULL_REQUEST='pull-request-only'
+    FAST_FORWARD='fast-forward-only'
+    NO_DELETES='no-deletes'
+    READ_ONLY='read-only'
 
 class Restriction(ResourceBase):
     def __init__(self, id, url, client, parent):
@@ -25,18 +39,28 @@ class Restriction(ResourceBase):
         """
         return self._client.delete(self.url())
 
-    @response_or_error
-    def update(self, value, users=None, groups=None, pattern=False):
-        """
-        Re-restrict a branch, or set of branches defined by a pattern, to a set of users and/or groups
-        """
-        data = dict(type=('PATTERN' if pattern else 'BRANCH'), value=value)
+    @staticmethod
+    def request_data(match, users, groups, keys, restriction_type, matcher_type):
+        data = dict(type=restriction_type.value)
+        data['matcher'] = dict(type={'id': matcher_type.value},
+                               id=match)
 
         if users is not None:
             data['users'] = users
         if groups is not None:
             data['groups'] = groups
+        if keys is not None:
+            data['accessKeys'] = keys
 
+        return data
+
+    @response_or_error
+    def update(self, match, users=None, groups=None, keys=None, restriction_type=RestrictionType.READ_ONLY, matcher_type=Matcher.PATTERN):
+        """
+        Re-restrict a branch, or set of branches defined by a pattern, to a set of users and/or groups
+        """
+        data = self.request_data(match, users, groups, keys, restriction_type, matcher_type)
+        self.delete()
         return self._client.put(self.url(""), data=data)
 
 
@@ -49,16 +73,12 @@ class Restrictions(ResourceBase, IterableResource):
         return Restriction(item, self.url(item), self._client, self)
 
     @response_or_error
-    def create(self, value, users=None, groups=None, pattern=False):
+    def create(self, match, users=None, groups=None, keys=None, restriction_type=RestrictionType.READ_ONLY, matcher_type=Matcher.PATTERN):
         """
-        Restrict a branch, or set of branches defined by a pattern, to a set of users and/or groups
+        Restrict a branch, or set of branches defined by a pattern, to a set of users, groups, and access keys
         """
-        data = dict(type=('PATTERN' if pattern else 'BRANCH'), value=value)
-
-        if users is not None:
-            data['users'] = users
-        if groups is not None:
-            data['groups'] = groups
+        data = Restriction.request_data(match, users, groups, keys,
+                                        restriction_type, matcher_type)
 
         return self._client.post(self.url(""), data=data)
 
