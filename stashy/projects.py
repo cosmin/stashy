@@ -113,6 +113,19 @@ class Project(ResourceBase):
     def get(self):
         return self._client.get(self.url())
 
+    def keys(self):
+        """
+        Retrieve the access keys associated with the project
+        """
+        return self.paginate('/ssh', is_keys=True)
+
+    @ok_or_error
+    def add_key(self, key_text, permission):
+        return self._client.post(self.url('/ssh', is_keys=True),
+                                 data=dict(key=dict(text=key_text),
+                                           permission=permission))
+
+
     permissions = Nested(ProjectPermissions, relative_path="/permissions")
     repos = Nested(Repos)
     settings = Nested(Settings)
