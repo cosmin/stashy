@@ -74,7 +74,7 @@ class Restriction(ResourceBase):
         data = self.request_data(match, users, groups, keys, restriction_type,
                                  matcher_type)
         self.delete()
-        return self._client.put(self.url(""), data=data)
+        return self._client.post(self._parent.url(), data=data)
 
 
 class Restrictions(ResourceBase, IterableResource):
