@@ -330,7 +330,27 @@ class Repository(ResourceBase):
     settings = Nested(Settings)
     webhooks = Nested(Webhooks)
     branch_permissions = Nested(BranchPermissions, relative_path=None)
+    @response_or_error
+    def _get_forkable(self):
+        """
+        Args:
+            N/A
+        Returns:
+            (bool): True if repo is forkable, False if it is not forkable
+        """
+        return self._client.get(self.url())
 
+    @ok_or_error
+    def _set_forkable(self, value):
+        """
+        Args:
+            value (bool): True if repo should be forkable, False otherwise
+        Returns:
+            Sets value of forkable to given argument
+        """
+        return self._client.put(self.url(), data=dict(forkable=value))
+
+    forkable = property(_get_forkable, _set_forkable, doc="Get or set the allow_forks option")
 
 class Repos(ResourceBase, IterableResource):
     @response_or_error
