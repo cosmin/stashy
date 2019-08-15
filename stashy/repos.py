@@ -330,6 +330,7 @@ class Repository(ResourceBase):
     settings = Nested(Settings)
     webhooks = Nested(Webhooks)
     branch_permissions = Nested(BranchPermissions, relative_path=None)
+    
     @response_or_error
     def _get_forkable(self):
         """
