@@ -330,6 +330,28 @@ class Repository(ResourceBase):
     settings = Nested(Settings)
     webhooks = Nested(Webhooks)
     branch_permissions = Nested(BranchPermissions, relative_path=None)
+       
+    @response_or_error
+    def _get_public(self):
+        """
+        Args:
+            N/A
+        Returns:
+            (bool): True if repo is public, False if it is not public
+        """
+        return self._client.get(self.url())
+
+    @ok_or_error
+    def _set_public(self, value):
+        """
+        Args:
+            value (bool): True if repo should be public, False otherwise
+        Returns:
+            Sets value of public to given argument
+        """
+        return self._client.put(self.url(), data=dict(public=value))
+
+    public = property(_get_public, _set_public, doc="Get or set the 'public' option")
 
     @response_or_error
     def _get_forkable(self):
