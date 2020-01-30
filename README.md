@@ -51,6 +51,12 @@ stash.projects.list()
 stash.projects[PROJECT].repos.list()
 ```
 
+* Create a pull request
+
+```python
+list(stash.projects[PROJECT].repos[REPO].pull_requests.create('PR_TITLE', 'SOURCE_REF', 'TARGET_REF', 'PR_COMMENT', 'PR_REVIEWERS_LIST'))
+```
+
 * List all the commits in a pull request
 
 ```python
