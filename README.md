@@ -13,6 +13,12 @@ Python client for the Atlassian Bitbucket Server (formerly known as Stash) [REST
 pip install stashy
 ```
 
+## Testing
+
+```
+tox
+```
+
 ## Usage
 ```python
 import stashy

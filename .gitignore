@@ -6,3 +6,4 @@
 /build
 /pip-log.txt
 /docs/_build
+/.tox/
