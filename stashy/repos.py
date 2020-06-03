@@ -227,37 +227,51 @@ class Repository(ResourceBase):
     default_branch = property(_get_default_branch, _set_default_branch, doc="Get or set the default branch")
 
     def get_all_branches(self, items):
-        """
-        Return list of all branches in this project and the repository
+        """Return list of all branches in this project and the repository
+
         :param items: limit parameter (max items in result)
-        :return: 
+
+        :returns:
+            The JSON result, converted to a Python data structure.
+
         """
         branches = self._client.get(self.url('/branches?limit={}'.format(items)))
         return json.loads(branches.content)
 
     def get_all_tags(self, items):
-        """
-        Return list of all tags in this project and the repository
+        """Return list of all tags in this project and the repository
+
         :param items: limit parameter (max items in result)
-        :return:
+
+        :returns:
+            The JSON result, converted to a Python data structure.
+
         """
         tags = self._client.get(self.url('/tags?limit={}'.format(items)))
         return json.loads(tags.content)
 
     def get_commit(self, commit):
-        """
-        Returns detailed information about a given commit
-        :param commit: like "1c972ea39318a4b3ce99bc51ab03277138c586ea"
-        :return: 
+        """Get detailed information about a given commit
+
+        :param commit:
+            e.g. ``"1c972ea39318a4b3ce99bc51ab03277138c586ea"``
+
+        :returns:
+            The JSON result, converted to a Python data structure.
+
         """
         res = self._client.get(self.url('/commits/{}'.format(commit)))
         return json.loads(res.content)
 
     def get_commit_pull_requests(self, commit):
-        """
-        Returns list of pull requests that "commit" is a part of
-        :param commit: like "1c972ea39318a4b3ce99bc51ab03277138c586ea"
-        :return:
+        """Returns list of pull requests that "commit" is a part of
+
+        :param commit:
+            e.g. ``"1c972ea39318a4b3ce99bc51ab03277138c586ea"``
+
+        :returns:
+            The JSON result, converted to a Python data structure.
+
         """
         res = self._client.get(self.url('/commits/{}/pull-requests'.format(commit)))
         return json.loads(res.content)
@@ -305,15 +319,22 @@ class Repository(ResourceBase):
         return self.paginate('/changes', params=params)
 
     def commits(self, until, since=None, path=None):
-        """
-        Retrieve a page of changesets from a given starting commit or between two commits.
+        """Retrieve a page of changesets from a given starting commit or between two commits.
         The commits may be identified by hash, branch or tag name.
 
-        since: the changeset id or ref (exclusively) to restrieve changesets after
-        until: the changeset id or ref (inclusively) to retrieve changesets before.
-        path: an optional path to filter changesets by.
+        :param since:
+            the changeset id or ref (exclusively) to restrieve
+            changesets after
+
+        :param until:
+            the changeset id or ref (inclusively) to retrieve
+            changesets before.
+
+        :param path:
+            an optional path to filter changesets by.
 
         Support for withCounts is not implement.
+
         """
         params = dict(until=until, withCounts=False)
         if since is not None:
@@ -330,7 +351,7 @@ class Repository(ResourceBase):
     settings = Nested(Settings)
     webhooks = Nested(Webhooks)
     branch_permissions = Nested(BranchPermissions, relative_path=None)
-       
+
     @response_or_error
     def _get_public(self):
         """
