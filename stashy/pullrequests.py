@@ -211,11 +211,11 @@ class PullRequest(ResourceBase):
             Either FROM, or TO
         """
         data = dict(text=commentText)
-        if parentCommentId is not -1:
+        if parentCommentId != -1:
             data['parent'] = dict(id=parentCommentId)
         elif srcPath is not None:
             data['anchor'] = dict(path=srcPath, srcPath=srcPath)
-            if fileLine is not -1:
+            if fileLine != -1:
                 data['anchor'].update(dict(line=fileLine, lineType=lineType, fileType=fileType))
         return self._client.post(self.url("/comments"), data=data)
 
@@ -306,5 +306,3 @@ class PullRequests(ResourceBase, IterableResource):
         Modify the settings for a pull requests workflow
         """
         return self._client.post(self.url(), data=configuration)
-
-
