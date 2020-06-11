@@ -321,6 +321,22 @@ class Repository(ResourceBase):
         if path is not None:
             params['path'] = path
         return self.paginate('/commits', params=params)
+    
+    def diff(self, from_branch, to_branch):
+        """
+        Retrieve a diff between two branches.
+
+        from_branch: source branch
+        to_branch: target branch        
+        """
+        params = {
+            'from': from_branch,
+            'to': to_branch,
+        }
+            
+        diff = self._client.get(self.url('/compare/diff'), params=params)
+        
+        return json.loads(diff.content)
 
     permissions = Nested(Permissions)
     repo_permissions = Nested(RepositoryPermissions,
