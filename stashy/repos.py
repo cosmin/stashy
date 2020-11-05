@@ -109,11 +109,16 @@ class Repository(ResourceBase):
         return self._client.put(self.url(), data=dict(name=name))
 
     @response_or_error
-    def move(self, newProject):
+    def move(self, newProject, name=None):
         """
-        Move the repository to the given project
+        Move the repository to the given project, optionally updating its name.
+
+        The repository's slug is derived from its name. If the name changes the slug may also change.
         """
-        return self._client.put(self.url(), data=dict(project=dict(key=newProject)))
+        data = dict(project=dict(key=newProject))
+        if name:
+            data.update(dict(name=name))
+        return self._client.put(self.url(), data=data)
 
     @response_or_error
     def get(self):
