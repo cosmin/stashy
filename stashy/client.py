@@ -12,8 +12,8 @@ from .builds import Build
 class Stash(object):
     _url = "/"
 
-    def __init__(self, base_url, username=None, password=None, oauth=None, verify=True, token=None, session=None):
-        self._client = StashClient(base_url, username, password, oauth, verify, token, session)
+    def __init__(self, base_url, username=None, password=None, oauth=None, verify=True, token=None, session=None, requests_auth=None):
+        self._client = StashClient(base_url, username, password, oauth, verify, token, session=session, requests_auth=requests_auth)
 
     admin = Nested(Admin)
     projects = Nested(Projects)
@@ -62,7 +62,7 @@ class StashClient(object):
     keys_api_version = '1.0'
     keys_api_path = '{0}/{1}'.format(keys_api_name, keys_api_version)
 
-    def __init__(self, base_url, username=None, password=None, oauth=None, verify=True, token=None, session=None):
+    def __init__(self, base_url, username=None, password=None, oauth=None, verify=True, token=None, session=None, requests_auth=None):
         assert isinstance(base_url, basestring)
 
         if base_url.endswith("/"):
@@ -84,6 +84,8 @@ class StashClient(object):
             self._session.auth = (username, password)
         elif token is not None:
             self._session.headers.update({'Authorization': 'Bearer {}'.format(token)})
+        elif requests_auth is not None:
+            self._session.auth = requests_auth
 
         self._session.cookies = self._session.head(self.url("")).cookies
         self._session.headers.update({'Content-Type': 'application/json'})
