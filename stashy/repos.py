@@ -1,6 +1,7 @@
 import json
 
 from .branch_permissions import BranchPermissions
+from .default_reviewers import DefaultReviewers
 from .compat import update_doc
 from .errors import ok_or_error, response_or_error
 from .helpers import Nested, ResourceBase, IterableResource
@@ -367,6 +368,7 @@ class Repository(ResourceBase):
     settings = Nested(Settings)
     webhooks = Nested(Webhooks)
     branch_permissions = Nested(BranchPermissions, relative_path=None)
+    default_reviewers = Nested(DefaultReviewers, relative_path=None)
 
     @response_or_error
     def _get_public(self):
