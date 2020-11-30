@@ -2,7 +2,12 @@ import os
 from setuptools import setup
 
 def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    with open(os.path.join(os.path.dirname(__file__), fname)) as fhandle:
+        return fhandle.read()
+
+def readlines(fname):
+    with open(os.path.join(os.path.dirname(__file__), fname)) as fhandle:
+        return fhandle.readlines()
 
 setup(name='stashy',
       version="0.7",
@@ -17,8 +22,8 @@ setup(name='stashy',
       packages=['stashy', 'stashy.admin'],
       test_suite = 'tests',
       #scripts=['bin/stash'],
-      #tests_require=open('test-requirements.txt').readlines(),
-      install_requires=open('requirements.txt').readlines(),
+      tests_requires=readlines('test-requirements.txt'),
+      install_requires=readlines('requirements.txt'),
       classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: Apache Software License',

@@ -9,5 +9,5 @@ jobs:
       dist: trusty
     - python: '3.7'
       dist: xenial
-install: pip install -r requirements.txt
+install: pip install -r test-requirements.txt
 script: python setup.py test
