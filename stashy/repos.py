@@ -201,6 +201,27 @@ class Repository(ResourceBase):
         return self._client.post(self.url('/', is_sync=True),
                                  data=dict(enabled=value))
 
+     @ok_or_error
+    def synchronize(self, refs_branch, description, action="DISCARD"):
+        """
+        Synchronize repos branche
+
+        https://docs.atlassian.com/bitbucket-server/rest/6.10.1/bitbucket-repository-ref-sync-rest.html#idp5
+        
+        refs_branch   - name of reference branch for which synchronize wil be applied, e.g. refs/heads/master
+        description   - reason of synchronization invocation
+        action        - action type what to do with conflicts
+        """
+        data = dict()
+        if refs_branch is not None:
+            data['refId'] = refs_branch
+        if action is not None:
+            data['action'] = action
+        if description is not None:
+            data['context'] = {'commitMessage': description}
+
+        return self._client.post(self.url('/synchronize', is_sync=True), data=data)
+
     @ok_or_error
     def delete_branch(self, value):
         return self._client.delete(self.url('/branches', is_branches=True),
