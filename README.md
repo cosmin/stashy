@@ -159,6 +159,7 @@ stash.projects[PROJECT].repos[REPO].permitted.list()
 /keys/1.0/projects/{projectKey}/repos/{repositorySlug}/ssh [GET, POST]
 /ssh/1.0/keys [GET, POST]
 /sync/latest/projects/{projectKey}/repos/{repositorySlug} [POST]
+sync/latest/projects/{projectKey}/repos/{repositorySlug}/synchronize [POST]
 ```
 
 ## Not yet implemented
