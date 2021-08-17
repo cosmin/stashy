@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+decorator = ">=3.4.0"
+requests = ">=2.5.1"
+tox-pipenv = "*"
+
+[dev-packages]
+mock = "*"
+
+[requires]
+
