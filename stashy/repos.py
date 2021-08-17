@@ -210,24 +210,28 @@ class Repository(ResourceBase):
         return self._client.post(self.url('/', is_sync=True),
                                  data=dict(enabled=value))
 
-     @ok_or_error
-    def synchronize(self, refs_branch, description, action="DISCARD"):
-        """
-        Synchronize repos branche
+    @ok_or_error
+    def synchronize(self, ref_id, action="MERGE", commit_message=None):
+        """Apply a manual operation to bring a ref back in sync with upstream
+        when it becomes out of sync due to conflicting changes.
 
         https://docs.atlassian.com/bitbucket-server/rest/6.10.1/bitbucket-repository-ref-sync-rest.html#idp5
         
-        refs_branch   - name of reference branch for which synchronize wil be applied, e.g. refs/heads/master
-        description   - reason of synchronization invocation
-        action        - action type what to do with conflicts
+        ref_id           - name of the ref to synchronize, e.g. refs/heads/master
+        action           - action to perform on conflicts. Valid options are DISCARD and MERGE
+        commit_message   - reason of synchronization invocation
         """
         data = dict()
-        if refs_branch is not None:
-            data['refId'] = refs_branch
-        if action is not None:
-            data['action'] = action
-        if description is not None:
-            data['context'] = {'commitMessage': description}
+        if ref_id is not None:
+            data['refId'] = ref_id
+
+        if action not in ["MERGE", "DISCARD"]:
+            raise ValueError(f"Invalid action '{action}' specified for synchronize operation.")
+        
+        data['action'] = action
+
+        if action == "MERGE" and commit_message is not None:
+            data['context'] = {'commitMessage': commitMessage}
 
         return self._client.post(self.url('/synchronize', is_sync=True), data=data)
 
