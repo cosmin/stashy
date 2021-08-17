@@ -22,7 +22,6 @@ setup(name='stashy',
       packages=['stashy', 'stashy.admin'],
       test_suite = 'tests',
       #scripts=['bin/stash'],
-      tests_requires=readlines('test-requirements.txt'),
       install_requires=readlines('requirements.txt'),
       classifiers=[
         'Development Status :: 3 - Alpha',
