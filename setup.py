@@ -10,7 +10,7 @@ def readlines(fname):
         return fhandle.readlines()
 
 setup(name='stashy',
-      version="0.7",
+      version="0.8",
       description='Python API client for the  Atlassian Bitbucket Server (formerly known as Stash) REST API',
       long_description=read('README.md'),
       long_description_content_type='text/markdown',
