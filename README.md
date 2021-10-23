@@ -81,6 +81,10 @@ list(stash..projects[PROJECT].repos[REPO].pull_requests[PULL_REQUEST].activities
 stash.projects[PROJECT].repos[REPO].pull_requests[PULL_REQUEST].delete_comment(COMMENT_ID, COMMENT_VERSION)
 ```
 
+```python
+stash.projects[PROJECT].repos[REPO].pull_requests[PULL_REQUEST].update_comment(COMMENT_ID, COMMENT_VERSION, COMMENT_TEXT)
+```
+
 * Show the diff of a pull request
 
 ```python
@@ -146,7 +150,7 @@ stash.projects[PROJECT].repos[REPO].permitted.list()
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/watch [POST, DELETE]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/changes [GET]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments [POST]
-/projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments/{commentId} [DELETE]
+/projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments/{commentId} [PUT, DELETE]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/commits [GET]
 /projects/{projectKey}/repos/{repositorySlug}/settings/hooks [GET]
 /projects/{projectKey}/repos/{repositorySlug}/settings/hooks/{hookKey} [GET]
@@ -182,7 +186,7 @@ sync/latest/projects/{projectKey}/repos/{repositorySlug}/synchronize [POST]
 /projects/{projectKey}/repos/{repositorySlug}/diff/{path:.*} [GET]
 /projects/{projectKey}/repos/{repositorySlug}/files [GET]
 /projects/{projectKey}/repos/{repositorySlug}/files/{path:.*} [GET]
-/projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments/{commentId} [PUT, GET]
+/projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/comments/{commentId} [GET]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/diff [GET]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/diff/{path:.*} [GET]
 /projects/{projectKey}/repos/{repositorySlug}/pull-requests/{pullRequestId}/participants [GET, DELETE, POST]

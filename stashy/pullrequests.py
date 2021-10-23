@@ -201,9 +201,19 @@ class PullRequest(ResourceBase):
         """
         Remove comment from a pull request created by the current user. Only users with REPO_ADMIN and above may delete comments created by other users.
 
-        Node: see https://docs.atlassian.com/bitbucket-server/rest/4.2.0/bitbucket-rest.html#idp1550352
+        Note: see https://docs.atlassian.com/bitbucket-server/rest/4.2.0/bitbucket-rest.html#idp1550352
         """
         return self._client.delete(self.url('/comments/%s?version=%s' % (commentId, commentVersion)))
+
+    @ok_or_error
+    def update_comment(self, commentId, commentVersion, commentText):
+        """
+        Update comment identified by commentId. Only the user who created the comment can update it.
+
+        Note: see https://docs.atlassian.com/bitbucket-server/rest/4.2.0/bitbucket-rest.html#idp1211728
+        """
+        data = {'version': commentVersion, 'text': commentText}
+        return self._client.put(self.url('/comments/%s' % commentId), data)
 
     @ok_or_error
     def comment(self, commentText, parentCommentId=-1, srcPath=None, fileLine=-1, lineType="CONTEXT", fileType="FROM"):
