@@ -81,6 +81,8 @@ list(stash..projects[PROJECT].repos[REPO].pull_requests[PULL_REQUEST].activities
 stash.projects[PROJECT].repos[REPO].pull_requests[PULL_REQUEST].delete_comment(COMMENT_ID, COMMENT_VERSION)
 ```
 
+* Update existing comment
+
 ```python
 stash.projects[PROJECT].repos[REPO].pull_requests[PULL_REQUEST].update_comment(COMMENT_ID, COMMENT_VERSION, COMMENT_TEXT)
 ```
