@@ -216,9 +216,9 @@ class PullRequest(ResourceBase):
         return self._client.put(self.url('/comments/%s' % commentId), data)
 
     @ok_or_error
-    def comment(self, commentText, parentCommentId=-1, srcPath=None, fileLine=-1, lineType="CONTEXT", fileType="FROM"):
+    def comment(self, commentText, parentCommentId=-1, srcPath=None, fileLine=-1, lineType="CONTEXT", fileType="FROM", blockerComment=False):
         """
-        Comment on a pull request. If parentCommentId is supplied, it the comment will be
+        Comment on a pull request. If parentCommentId is supplied, the comment will be
         a child comment of the comment with the id parentCommentId.
 
         Note: see https://developer.atlassian.com/static/rest/stash/3.11.3/stash-rest.html#idp1448560
@@ -236,6 +236,8 @@ class PullRequest(ResourceBase):
             data['anchor'] = dict(path=srcPath, srcPath=srcPath)
             if fileLine != -1:
                 data['anchor'].update(dict(line=fileLine, lineType=lineType, fileType=fileType))
+        if blockerComment:
+            return self._client.post(self.url("/blocker-comments"), data=data)
         return self._client.post(self.url("/comments"), data=data)
 
     def diff(self):
