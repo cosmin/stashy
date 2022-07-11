@@ -8,6 +8,7 @@ from .ssh import Keys
 from .compat import basestring
 from .allrepos import Repos
 from .builds import Build
+from .users import Users
 
 class Stash(object):
     _url = "/"
@@ -17,6 +18,7 @@ class Stash(object):
 
     admin = Nested(Admin)
     projects = Nested(Projects)
+    users = Nested(Users)
     ssh = Nested(Keys)
     repos = Nested(Repos)
 
@@ -25,12 +27,6 @@ class Stash(object):
         Consider using stash.admin.groups instead.
         """
         return self.admin.groups.get(filter)
-
-    def users(self, filter=None):
-        """
-        Consider using stash.admin.users instead.
-        """
-        return self.admin.users.get(filter)
 
     def build(self, git_hash):
         """
