@@ -130,17 +130,17 @@ class IterableResource(object):
         """
         return self.all()
 
-    def all(self):
+    def all(self, params = None):
         """
         Retrieve all the resources.
         """
-        return self.paginate("")
+        return self.paginate("", params = params)
 
-    def list(self):
+    def list(self, params = None):
         """
         Convenience method to return a list (rather than iterable) of all elements
         """
-        return list(self.all())
+        return list(self.all(params=params))
 
 
 class FilteredIterableResource(IterableResource):
