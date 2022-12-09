@@ -52,16 +52,19 @@ class Webhook(ResourceBase):
 
 
 class Webhooks(ResourceBase, IterableResource):
-    def all(self, type=None):
+    def all(self, type=None, params = None):
         """
         Retrieve webhooks for this repository, optionally filtered by type.
 
-        type: Valid values are PRE_RECEIVE or POST_RECEIVE
+        type:  Valid values are PRE_RECEIVE or POST_RECEIVE
+        param: An optional param to enable pagination paramters.
         """
-        params = None
-        if type is not None:
-            params = dict(type=type)
-        return self.paginate("", params=params)
+        if params is None: params = dict()
+        kw = {k: v for k, v in params.items()}
+        
+        # the below condition is to just ensure the params doesnt contain type.
+        if type is not None and type not in kw: kw.update(dict(type=type))
+        return self.paginate("", params=kw)
 
     @response_or_error
     def create(self, name, url, events=["repo:refs_changed"], active=True):
@@ -74,11 +77,18 @@ class Webhooks(ResourceBase, IterableResource):
                                                    "url": url
                                                    })
 
-    def list(self, type=None):
+    def list(self, type=None, params=None):
         """
         Convenience method to return a list (rather than iterable) of all elements
+        
+        param: an optional param to enable pagination paramters.
         """
-        return list(self.all(type=type))
+        if params is None: params = dict()
+        kw = {k: v for k, v in params.items()}
+        
+        # the below condition is to just ensure the params doesnt contain type. 
+        if type is not None and type not in kw: kw.update(dict(type=type))
+        return list(self.all(type=type, params=kw))
 
     def __getitem__(self, item):
         """
@@ -231,7 +241,7 @@ class Repository(ResourceBase):
         data['action'] = action
 
         if action == "MERGE" and commit_message is not None:
-            data['context'] = {'commitMessage': commitMessage}
+            data['context'] = {'commitMessage': commit_message}
 
         return self._client.post(self.url('/synchronize', is_sync=True), data=data)
 
@@ -246,18 +256,22 @@ class Repository(ResourceBase):
         return self._client.get(self.url('/branches/info/%s' % changesetId,
                                          is_branches=True))
 
-    def branches(self, filterText=None, orderBy=None, details=None):
+    def branches(self, filterText=None, orderBy=None, details=None, params=None):
         """
         Retrieve the branches matching the supplied filterText param.
+        
+        params: an optional params to enable pagination paramters.
         """
-        params = {}
+        if params is None: params = dict()
+        kw = {k: v for k, v in params.items()} 
+        
         if filterText is not None:
-            params['filterText'] = filterText
+            kw['filterText'] = filterText
         if orderBy is not None:
-            params['orderBy'] = orderBy
+            kw['orderBy'] = orderBy
         if details is not None:
-            params['details'] = details
-        return self.paginate('/branches', params=params)
+            kw['details'] = details
+        return self.paginate('/branches', params=kw)
 
     default_branch = property(_get_default_branch, _set_default_branch, doc="Get or set the default branch")
 
@@ -339,7 +353,7 @@ class Repository(ResourceBase):
 
             return self.paginate("/browse/" + path, params=params, values_key='lines')
 
-    def changes(self, until, since=None):
+    def changes(self, until, since=None, params=None):
         """
         Retrieve a page of changes made in a specified commit.
 
@@ -347,13 +361,19 @@ class Repository(ResourceBase):
                If not specified the parent of the until changeset is used.
 
         until: the changeset to retrieve file changes for.
+
+        params: an optional params to enable pagination paramters.
         """
-        params = dict(until=until)
+                
+        if params is None: params = dict()
+        kw = {k: v for k, v in params.items()} 
+        kw.update(dict(until=until))
+        
         if since is not None:
             params['since'] = since
-        return self.paginate('/changes', params=params)
+        return self.paginate('/changes', params=kw)
 
-    def commits(self, until, since=None, path=None):
+    def commits(self, until, since=None, path=None, params=None):
         """Retrieve a page of changesets from a given starting commit or between two commits.
         The commits may be identified by hash, branch or tag name.
 
@@ -367,16 +387,23 @@ class Repository(ResourceBase):
 
         :param path:
             an optional path to filter changesets by.
+        
+        :param params:
+            an optional params to enable pagination paramters.
 
         Support for withCounts is not implement.
 
         """
-        params = dict(until=until, withCounts=False)
+        if params is None: params = dict()
+        kw = {k: v for k, v in params.items()} 
+        kw.update(dict(until=until, withCounts=False))
+
         if since is not None:
-            params['since'] = since
+            kw['since'] = since
         if path is not None:
-            params['path'] = path
-        return self.paginate('/commits', params=params)
+            kw['path'] = path
+
+        return self.paginate('/commits', params=kw)
 
     def diff(self, from_branch, to_branch):
         """

@@ -49,21 +49,26 @@ class Hook(ResourceBase):
 
 
 class Hooks(ResourceBase, IterableResource):
-    def all(self, type=None):
+    def all(self, type=None, params = None):
         """
         Retrieve hooks for this repository, optionally filtered by type.
 
         type: Valid values are PRE_RECEIVE or POST_RECEIVE
         """
-        params=None
-        if type is not None:
-            params = dict(type=type)
+        if params is None: params = dict()
+        
+        # the below condition is to just ensure the params doesnt contain type.
+        if type is not None and type not in params: params.update(dict(type=type))
         return self.paginate("", params=params)
 
-    def list(self, type=None):
+    def list(self, type=None, params = None):
         """
         Convenience method to return a list (rather than iterable) of all elements
         """
+        if params is None: params = dict()
+        
+        # the below condition is to just ensure the params doesnt contain type.
+        if type is not None and type not in params: params.update(dict(type=type))
         return list(self.all(type=type))
 
     def __getitem__(self, item):
